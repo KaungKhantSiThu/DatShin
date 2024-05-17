@@ -8,11 +8,15 @@
 import UIKit
 import Nuke
 import NukeExtensions
+import Combine
 
 class HomeViewController: DSDataLoadingViewController {
     
     var collectionView: UICollectionView! = nil
     var dataSource: DataSource! = nil
+    
+    private let pagingInfoSubject = PassthroughSubject<PagingInfo, Never>()
+
     
     let fetcher: MoviesFetcherService
     
@@ -40,7 +44,7 @@ class HomeViewController: DSDataLoadingViewController {
         // Do any additional setup after loading the view.
         configureViewController()
         configureHierarchy()
-        configureDataSource()
+        createDataSource()
         fetchMovies()
     }
     
@@ -81,50 +85,43 @@ extension HomeViewController {
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        collectionView.register(DSPosterCell.self, forCellWithReuseIdentifier: DSPosterCell.reuseIdentifier)
+        collectionView.register(FeaturedViewCell.self, forCellWithReuseIdentifier: FeaturedViewCell.reuseIdentifier)
+
     }
     
-    func configureDataSource() {
+    func configure<T: SelfConfiguringCell>(_ cellType: T.Type, with movie: Movie, for indexPath: IndexPath) -> T {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellType.reuseIdentifier, for: indexPath) as? T else {
+            fatalError("Unable to dequeue \(cellType)")
+        }
         
-        let cellRegistration = UICollectionView.CellRegistration<DSPosterCell, Movie.ID> { [weak self] (cell, indexPath, movieID) in
-            guard let self = self else { return }
-            
-            
-            guard let identifier = Identifier(rawValue: indexPath.section)  else { return }
+        cell.configure(with: movie)
+        return cell
+    }
+    
+    func createDataSource() {
+        
+        dataSource = DataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, movieID) in
+            guard let self = self else { return nil }
+            guard let identifier = Identifier(rawValue: indexPath.section)  else { return nil}
             let section = self.sectionsStore.fetchByID(identifier)
-            
-            let imageURL: URL
             let movie = self.moviesStore.fetchByID(movieID)
-            
-            //            switch section.id {
-            //            case "playlist":
-            //                return self.createMediumTableSection(using: section)
-            //            case "collections":
-            //                return self.createSmallTableSection(using: section)
-            //            default:
-            //                return self.createFeaturedSection(using: section)
-            //            }
             switch section.id {
             case .nowPlaying:
-                imageURL = ImageLoader.shared.generateFullURL(from: movie.backdropPath, as: .backdrop, idealWidth: 300)
-                //            case .popular:
-                //                <#code#>
-                //            case .topRated:
-                //                <#code#>
-                //            case .upcoming:
-                //                <#code#>
+                return self.configure(FeaturedViewCell.self, with: movie, for: indexPath)
+//            case .popular:
+//                <#code#>
+//            case .topRated:
+//                <#code#>
+//            case .upcoming:
+//                <#code#>
             default:
-                imageURL = ImageLoader.shared.generateFullURL(from: movie.posterPath, as: .poster, idealWidth: 100)
+                return self.configure(DSPosterCell.self, with: movie, for: indexPath)
             }
-            
-            let request = self.makeRequest(with: imageURL, cellSize: cell.bounds.size)
-            let options = self.makeImageLoadingOptions()
-            NukeExtensions.loadImage(with: request, options: options, into: cell.imageView)
         }
         
-        dataSource = DataSource(collectionView: collectionView) { (collectionView, indexPath, identifier) in
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
-        }
-        
+        // Header
         let supplementaryRegistration = UICollectionView.SupplementaryRegistration<TitleSupplementaryView>(elementKind: TitleSupplementaryView.reuseIdentifier) { [weak self] (supplementaryView, string, indexPath) in
             
             guard let self = self else { return }
@@ -137,6 +134,31 @@ extension HomeViewController {
             return self.collectionView.dequeueConfiguredReusableSupplementary(
                 using: supplementaryRegistration, for: index)
         }
+        
+        // Footer
+        
+//        let pagingFooter = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: PagingSectionFooterView.reuseIdentifier, for: indexPath) as! PagingSectionFooterView
+//
+//        let itemCount = self.datasource.snapshot().numberOfItems(inSection: indexPath.section)
+//        pagingFooter.configure(with: itemCount)
+//
+//        pagingFooter.subscribeTo(subject: pagingInfoSubject, for: indexPath.section)
+//
+//        return pagingFooter
+//        let footerRegistration = UICollectionView.SupplementaryRegistration<PagingSectionFooterView>(elementKind: PagingSectionFooterView.reuseIdentifier) { [weak self] supplementaryView, elementKind, indexPath in
+//            guard let self = self else { return }
+//            
+//            let sectionID = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
+//            let itemCount = self.dataSource.snapshot().numberOfItems(inSection: sectionID)
+//            supplementaryView.configure(with: itemCount)
+//            supplementaryView.subscribeTo(subject: pagingInfoSubject, for: indexPath.section)
+//        }
+//        
+//        dataSource.supplementaryViewProvider = { (view, kind, index) in
+//            return self.collectionView.dequeueConfiguredReusableSupplementary(
+//                using: footerRegistration, for: index)
+//        }
+
     }
     
     func createCompositionalLayout() -> UICollectionViewLayout {
@@ -145,17 +167,9 @@ extension HomeViewController {
             
             guard let identifier = Identifier(rawValue: sectionIndex)  else { return nil }
             let section = self.sectionsStore.fetchByID(identifier)
-            //            switch section.id {
-            //            case "playlist":
-            //                return self.createMediumTableSection(using: section)
-            //            case "collections":
-            //                return self.createSmallTableSection(using: section)
-            //            default:
-            //                return self.createFeaturedSection(using: section)
-            //            }
             switch section.id {
             case .nowPlaying:
-                return self.createFeaturedSection(using: section)
+                return self.createFeaturedSection(using: sectionIndex)
                 
                 //            case .popular:
                 //                <#code#>
@@ -174,20 +188,37 @@ extension HomeViewController {
         return layout
     }
     
-    func createFeaturedSection(using section: Section) -> NSCollectionLayoutSection {
+    func createFeaturedSection(using sectionIndex: Int) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-        layoutItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5)
         
         let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8), heightDimension: .fractionalWidth(0.5))
         let layoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: layoutGroupSize, subitems: [layoutItem])
         
         let layoutSection = NSCollectionLayoutSection(group: layoutGroup)
         layoutSection.orthogonalScrollingBehavior = .groupPagingCentered
+        layoutSection.interGroupSpacing = 10
+        layoutSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         
+        // Header
         let layoutSectionHeader = createSectionHeader()
         layoutSection.boundarySupplementaryItems = [layoutSectionHeader]
+        
+        // Footer
+//        let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(20))
+//
+//        let pagingFooterElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+//        layoutSection.boundarySupplementaryItems += [pagingFooterElement]
+//
+//        layoutSection.visibleItemsInvalidationHandler = { [weak self] (items, offset, env) -> Void in
+//            guard let self = self else { return }
+//
+//            let page = round(offset.x / self.view.bounds.width)
+//
+//            self.pagingInfoSubject.send(PagingInfo(sectionIndex: sectionIndex, currentPage: Int(page)))
+//        }
+
         
         return layoutSection
     }
@@ -224,22 +255,13 @@ extension HomeViewController {
         loadingTask = Task {
             
             do {
-
                 async let topRated = try fetcher.fetchMovies(page: 1, section: .topRated)
                 async let nowPlaying = try fetcher.fetchMovies(page: 1, section: .nowPlaying)
                 async let popular = try fetcher.fetchMovies(page: 1, section: .popular)
                 async let upcoming = try fetcher.fetchMovies(page: 1, section: .upcoming)
                 
                 let movies = try await (topRated, nowPlaying, popular, upcoming)
-                
-                
-                //                collections = [
-                //                    .init(id: .upcoming, movies: movies.3),
-                //                    .init(id: .nowPlaying, movies: movies.1),
-                //                    .init(id: .popular, movies: movies.2),
-                //                    .init(id: .topRated, movies: movies.0)
-                //                ]
-                
+
                 moviesStore = AnyModelStore(duplicatedIDs: [movies.0, movies.1, movies.2, movies.3])
                 
                 sectionsStore = AnyModelStore([
@@ -255,16 +277,6 @@ extension HomeViewController {
                 presentDSAlertOnMainThread(title: "Movies fetch failed", message: error.localizedDescription, buttonTitle: "Ok")
             }
         }
-    }
-    
-    
-    
-    func makeRequest(with url: URL, cellSize: CGSize) -> ImageRequest {
-        ImageRequest(url: url)
-    }
-    
-    func makeImageLoadingOptions() -> ImageLoadingOptions {
-        ImageLoadingOptions(transition: .fadeIn(duration: 0.25))
     }
 }
 
