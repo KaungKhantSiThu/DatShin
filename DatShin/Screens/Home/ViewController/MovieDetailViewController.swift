@@ -7,49 +7,11 @@
 
 import UIKit
 
-class MovieDetailViewController: NiblessViewController {
-    
-//    private let imageHeaderView = ImageHeaderView(frame: .zero)
-//    
-//    private lazy var imageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.contentMode = .scaleAspectFill
-//        imageView.clipsToBounds = true
-//        return imageView
-//    }()
-//    
-//    private lazy var titleLabel: UILabel = {
-//        let titleLabel = UILabel()
-//        titleLabel.textColor = .label
-//        titleLabel.font = UIFont.preferredFont(forTextStyle: .title1)
-//        titleLabel.textAlignment = .center
-//        titleLabel.adjustsFontSizeToFitWidth = true
-//        return titleLabel
-//    }()
-//    
-//    private lazy var taglineLabel: UILabel = {
-//        let taglineLabel = UILabel()
-//        taglineLabel.textColor = .label
-//        taglineLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-//        taglineLabel.textAlignment = .center
-//        taglineLabel.adjustsFontSizeToFitWidth = true
-//        return taglineLabel
-//    }()
-//    
-//    
-//    private lazy var overviewTextView: UITextView = {
-//        let overviewTextView = UITextView()
-//        overviewTextView.textColor = .label
-//        overviewTextView.font = UIFont.preferredFont(forTextStyle: .body)
-//        overviewTextView.isScrollEnabled = false
-//        overviewTextView.isEditable = false
-//        overviewTextView.isSelectable = false
-//        return overviewTextView
-//    }()
-//    
-//    private let scrollView = UIScrollView()
-//    
-//    private let stackView = UIStackView()
+//protocol MovieDetailViewControllerDelegate: AnyObject {
+//    func movieDetailViewController(_ viewcontroller: MovieDetailViewController, didTapFavorite: Movie.ID)
+//}
+
+class MovieDetailViewController: DSDataLoadingViewController {
     
     private var loadingTask: Task<Void, Never>?
     
@@ -57,7 +19,11 @@ class MovieDetailViewController: NiblessViewController {
     
     init(viewModel: MovieDetailViewModel) {
         self.viewModel = viewModel
-        super.init()
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewWillAppear(_ animated: Bool) {

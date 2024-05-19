@@ -63,6 +63,16 @@ class HomeViewController: DSDataLoadingViewController {
     func configureViewController() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.configureWithTransparentBackground()
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+//
+        navigationItem.standardAppearance = appearance
+        navigationItem.scrollEdgeAppearance = appearance
+//        
+//        navigationController?.navigationBar.barTintColor = UIColor.clear
     }
     
 }
@@ -77,16 +87,20 @@ extension HomeViewController {
         collectionView.isPrefetchingEnabled = true
         collectionView.prefetchDataSource = self
         
+        // To ignore Safe Area Layout
+        collectionView.contentInsetAdjustmentBehavior = .never
+
+        
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
-        collectionView.register(DSPosterCell.self, forCellWithReuseIdentifier: DSPosterCell.reuseIdentifier)
+        collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.reuseIdentifier)
         collectionView.register(FeaturedViewCell.self, forCellWithReuseIdentifier: FeaturedViewCell.reuseIdentifier)
 
     }
@@ -117,12 +131,12 @@ extension HomeViewController {
 //            case .upcoming:
 //                <#code#>
             default:
-                return self.configure(DSPosterCell.self, with: movie, for: indexPath)
+                return self.configure(PosterCell.self, with: movie, for: indexPath)
             }
         }
         
         // Header
-        let supplementaryRegistration = UICollectionView.SupplementaryRegistration<TitleSupplementaryView>(elementKind: TitleSupplementaryView.reuseIdentifier) { [weak self] (supplementaryView, string, indexPath) in
+        let supplementaryRegistration = UICollectionView.SupplementaryRegistration<MoviesRowHeaderSupplementaryView>(elementKind: MoviesRowHeaderSupplementaryView.reuseIdentifier) { [weak self] (supplementaryView, string, indexPath) in
             
             guard let self = self else { return }
             
@@ -193,7 +207,7 @@ extension HomeViewController {
         
         let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8), heightDimension: .fractionalWidth(0.5))
+        let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1.3))
         let layoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: layoutGroupSize, subitems: [layoutItem])
         
         let layoutSection = NSCollectionLayoutSection(group: layoutGroup)
@@ -202,23 +216,24 @@ extension HomeViewController {
         layoutSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         
         // Header
-        let layoutSectionHeader = createSectionHeader()
-        layoutSection.boundarySupplementaryItems = [layoutSectionHeader]
+//        let layoutSectionHeader = createSectionHeader()
+//        layoutSection.boundarySupplementaryItems = [layoutSectionHeader]
         
         // Footer
-//        let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(20))
-//
-//        let pagingFooterElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
-//        layoutSection.boundarySupplementaryItems += [pagingFooterElement]
-//
-//        layoutSection.visibleItemsInvalidationHandler = { [weak self] (items, offset, env) -> Void in
-//            guard let self = self else { return }
-//
-//            let page = round(offset.x / self.view.bounds.width)
-//
-//            self.pagingInfoSubject.send(PagingInfo(sectionIndex: sectionIndex, currentPage: Int(page)))
-//        }
+        /*
+        let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(20))
 
+        let pagingFooterElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+        layoutSection.boundarySupplementaryItems += [pagingFooterElement]
+
+        layoutSection.visibleItemsInvalidationHandler = { [weak self] (items, offset, env) -> Void in
+            guard let self = self else { return }
+
+            let page = round(offset.x / self.view.bounds.width)
+
+            self.pagingInfoSubject.send(PagingInfo(sectionIndex: sectionIndex, currentPage: Int(page)))
+        }
+*/
         
         return layoutSection
     }
@@ -227,7 +242,7 @@ extension HomeViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(100), heightDimension: .absolute(150))
+        let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.45), heightDimension: .estimated(170))
         let layoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: layoutGroupSize, subitems: [layoutItem])
         
         let layoutSection = NSCollectionLayoutSection(group: layoutGroup)
@@ -242,10 +257,10 @@ extension HomeViewController {
     
     func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let layoutSectionHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                             heightDimension: .estimated(44))
+                                                             heightDimension: .estimated(50))
         let layoutSectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: layoutSectionHeaderSize,
-            elementKind: TitleSupplementaryView.reuseIdentifier,
+            elementKind: MoviesRowHeaderSupplementaryView.reuseIdentifier,
             alignment: .top)
         return layoutSectionHeader
     }

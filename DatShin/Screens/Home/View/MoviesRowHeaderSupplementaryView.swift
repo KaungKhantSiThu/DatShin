@@ -7,9 +7,9 @@
 
 import UIKit
 
-class TitleSupplementaryView: UICollectionReusableView {
+class MoviesRowHeaderSupplementaryView: UICollectionReusableView {
     static var reuseIdentifier: String {
-        return String(describing: TitleSupplementaryView.self)
+        return String(describing: MoviesRowHeaderSupplementaryView.self)
       }
 
       // 2

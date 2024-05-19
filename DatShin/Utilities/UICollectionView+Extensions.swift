@@ -30,7 +30,7 @@ func createLayout() -> UICollectionViewLayout {
                                               heightDimension: .estimated(44))
         let titleSupplementary = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: titleSize,
-            elementKind: TitleSupplementaryView.reuseIdentifier,
+            elementKind: MoviesRowHeaderSupplementaryView.reuseIdentifier,
             alignment: .top)
         section.boundarySupplementaryItems = [titleSupplementary]
         return section

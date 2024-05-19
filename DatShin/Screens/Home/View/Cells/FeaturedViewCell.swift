@@ -53,10 +53,11 @@ class FeaturedViewCell: UICollectionViewCell, SelfConfiguringCell {
         
         titleLabel.font = Appearance.subtitleFont
         titleLabel.textColor = .white
+        titleLabel.numberOfLines = 0
         titleLabel.adjustsFontForContentSizeCategory = true
         
-        subtitleLabel.font = Appearance.subtitleFont
-        subtitleLabel.textColor = .gray
+        subtitleLabel.font = Appearance.likeCountFont
+        subtitleLabel.textColor = .lightGray
         subtitleLabel.adjustsFontForContentSizeCategory = true
                                        
         captionLabel.font = Appearance.likeCountFont
@@ -67,7 +68,6 @@ class FeaturedViewCell: UICollectionViewCell, SelfConfiguringCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .center
-        
         contentView.addSubview(stackView)
         
         NSLayoutConstraint.activate([
@@ -76,13 +76,14 @@ class FeaturedViewCell: UICollectionViewCell, SelfConfiguringCell {
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
+            gradientView.topAnchor.constraint(equalTo: contentView.topAnchor),
             gradientView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             gradientView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             gradientView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            gradientView.heightAnchor.constraint(equalToConstant: height),
+//            gradientView.heightAnchor.constraint(equalToConstant: height),
             
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
@@ -94,9 +95,11 @@ class FeaturedViewCell: UICollectionViewCell, SelfConfiguringCell {
     public func configure(with movie: Movie) {
         titleLabel.text = movie.title
         
-        if let genres = movie.genres {
-            subtitleLabel.text = genres.map { $0.name }.joined(separator: ", ")
-        }
+//        if let genres = movie.genres {
+//            subtitleLabel.text = genres.map { $0.name }.joined(separator: ", ")
+//        }
+        
+        subtitleLabel.text = movie.genres?.map { $0.name }.joined(separator: ", ") ?? "Fake genres"
         
         captionLabel.text = movie.tagline
         

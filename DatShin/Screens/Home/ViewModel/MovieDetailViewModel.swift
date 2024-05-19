@@ -18,6 +18,8 @@ class MovieDetailViewModel {
     @Published var title = ""
     @Published var tagline = ""
     @Published var overview = ""
+    @Published var genres = ""
+    @Published var runtime = ""
     @Published var image: UIImage? = UIImage(systemName: "photo")
     
     @Published var error: Error?
@@ -34,6 +36,8 @@ class MovieDetailViewModel {
             title = movie.title
             tagline = movie.tagline ?? "No tagline"
             overview = movie.overview ?? "No overview"
+            runtime = "\(movie.runtime ?? 0) minutes"
+            genres = movie.genres?.map { $0.name }.joined(separator: " * ") ?? "Not genres"
             ImageLoader.shared.downloadImage(from: movie.backdropPath, as: .backdrop) { [weak self] image in
                 self?.image = image
             }

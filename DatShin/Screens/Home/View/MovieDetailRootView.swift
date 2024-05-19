@@ -23,15 +23,34 @@ class MovieDetailRootView: NiblessView {
     }()
     
     lazy var taglineLabel: UILabel = {
-        let taglineLabel = UILabel()
-        taglineLabel.textColor = .secondaryLabel
-        taglineLabel.text = ""
-        taglineLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        taglineLabel.textAlignment = .center
-        taglineLabel.adjustsFontSizeToFitWidth = true
-        return taglineLabel
+        let label = UILabel()
+        label.textColor = .secondaryLabel
+        label.text = ""
+        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        return label
     }()
     
+    lazy var runtimeLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .secondaryLabel
+        label.text = ""
+        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+    
+    lazy var genresLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .secondaryLabel
+        label.text = ""
+        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
     
     lazy var overviewTextView: UITextView = {
         let overviewTextView = UITextView()
@@ -58,6 +77,8 @@ class MovieDetailRootView: NiblessView {
         let stackView = UIStackView(arrangedSubviews: [
             imageHeaderView,
             taglineLabel,
+            runtimeLabel,
+            genresLabel,
             overviewTextView,
 //            collectionView
         ])
@@ -95,15 +116,11 @@ class MovieDetailRootView: NiblessView {
     
     func activateConstraints() {
         activateConstraintsScrollView()
-//        activateConstraintsContentView()
-//        activateConstraintsImageHeaderView()
         activateConstraintsStackView()
     }
     
     func activateConstraintsScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-
-//        let frameLayoutGuide = scrollView.frameLayoutGuide
         
         NSLayoutConstraint.activate([
                 scrollView.topAnchor.constraint(equalTo: topAnchor),
@@ -112,46 +129,6 @@ class MovieDetailRootView: NiblessView {
                 scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
-//    func activateConstraintsContentView() {
-//        contentView.translatesAutoresizingMaskIntoConstraints = false
-//        
-
-//        
-//        let width = contentView.widthAnchor
-//            .constraint(equalTo: widthAnchor)
-//        
-//        let top = contentView.topAnchor
-//            .constraint(equalTo: contentLayoutGuide.topAnchor)
-//        let leading = contentView.leadingAnchor
-//            .constraint(equalTo: contentLayoutGuide.leadingAnchor)
-//        let trailing = contentView.trailingAnchor
-//            .constraint(equalTo: contentLayoutGuide.trailingAnchor)
-//        let bottom = contentView.bottomAnchor
-//            .constraint(equalTo: contentLayoutGuide.bottomAnchor)
-//        
-//        NSLayoutConstraint.activate(
-//            [width, leading, trailing, top, bottom])
-//    }
-    
-//    func activateConstraintsImageHeaderView() {
-//        imageHeaderView.translatesAutoresizingMaskIntoConstraints = false
-//        
-//        let height = imageHeaderView.heightAnchor.constraint(equalToConstant: 250)
-//        let width = imageHeaderView.widthAnchor.constraint(equalTo: widthAnchor)
-//        
-//        let contentLayoutGuide = scrollView.contentLayoutGuide
-//        let top = imageHeaderView.topAnchor
-//            .constraint(equalTo: contentLayoutGuide.topAnchor)
-//        let leading = imageHeaderView.leadingAnchor
-//            .constraint(equalTo: contentLayoutGuide.leadingAnchor)
-//        let trailing = imageHeaderView.trailingAnchor
-//            .constraint(equalTo: contentLayoutGuide.trailingAnchor)
-//        
-//        
-//        NSLayoutConstraint.activate(
-//            [width, height, leading, trailing, top])
-//    }
     
     func activateConstraintsStackView() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -194,9 +171,20 @@ class MovieDetailRootView: NiblessView {
             .assign(to: \.text!, on: taglineLabel)
             .store(in: &subscriptions)
         
+        viewModel.$runtime
+            .receive(on: RunLoop.main)
+            .assign(to: \.text!, on: runtimeLabel)
+            .store(in: &subscriptions)
+        
+        viewModel.$genres
+            .receive(on: RunLoop.main)
+            .assign(to: \.text!, on: genresLabel)
+            .store(in: &subscriptions)
+        
         viewModel.$overview
             .receive(on: RunLoop.main)
             .assign(to: \.text, on: overviewTextView)
             .store(in: &subscriptions)
+        
     }
 }
