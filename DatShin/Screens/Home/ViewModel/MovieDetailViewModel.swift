@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class MovieDetailViewModel {
     
@@ -23,6 +24,11 @@ class MovieDetailViewModel {
     @Published var image: UIImage? = UIImage(systemName: "photo")
     
     @Published var error: Error?
+    
+    
+    
+    lazy var coreDataStack = CoreDataStack(modelName: "DatShin")
+    
     
     init(id: Movie.ID, fetcherService: MoviesFetcherService) {
         self.id = id
@@ -46,12 +52,36 @@ class MovieDetailViewModel {
         }
     }
     
-    func addToBookmark() {
-        guard let movie = movie else { return }
-        PersistenceManager.updateWith(favorite: FavoriteMovie(id: movie.id, title: title, posterPath: movie.posterPath), actionType: .add) { [weak self] error in
-            if let error = error {
-                self?.error = error
+    func addToWatchlist() {
+        guard let movie = movie, !itemExists(movie.id) else { return }
+        //        PersistenceManager.updateWith(favorite: FavoriteMovie(id: movie.id, title: title, posterPath: movie.posterPath), actionType: .add) { [weak self] error in
+        //            if let error = error {
+        //                self?.error = error
+        //            }
+        //        }
+        let wlMovie = WLMovie(context: coreDataStack.managedContext)
+        wlMovie.id = Int32(movie.id)
+        wlMovie.title = movie.title
+        wlMovie.saveDate = Date()
+        wlMovie.posterPath = movie.posterPath
+        wlMovie.hasWatched = false
+        
+        if let genres = movie.genres {
+            for genre in genres {
+                let wlGenre = WLGenre(context: coreDataStack.managedContext)
+                wlGenre.id = Int16(genre.id)
+                wlGenre.name = genre.name
+                wlMovie.addToGenres(wlGenre)
+                wlGenre.addToMovies(wlMovie)
             }
         }
+        
+        coreDataStack.saveContext()
+    }
+    
+    func itemExists(_ id: Movie.ID) -> Bool {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "WLMovie")
+        fetchRequest.predicate = NSPredicate(format: "id == %d", Int32(id))
+        return ((try? coreDataStack.managedContext.count(for: fetchRequest)) ?? 0) > 0
     }
 }

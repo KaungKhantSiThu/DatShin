@@ -57,6 +57,6 @@ class MovieDetailViewController: DSDataLoadingViewController {
     
     @objc
     func bookmarkTapped() {
-        viewModel.addToBookmark()
+        viewModel.addToWatchlist()
     }
 }

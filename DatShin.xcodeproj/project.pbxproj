@@ -89,6 +89,12 @@
 		70F4D5442BFB2F9D00140077 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5432BFB2F9D00140077 /* SearchService.swift */; };
 		70F4D5462BFB2FE700140077 /* SearchEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5452BFB2FE700140077 /* SearchEndpoint.swift */; };
 		70F4D5482BFB30F100140077 /* SearchViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5472BFB30F100140077 /* SearchViewController+DataSource.swift */; };
+		70F4D54B2BFDF54800140077 /* DatShin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5492BFDF54800140077 /* DatShin.xcdatamodeld */; };
+		70F4D54D2BFE1AB600140077 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D54C2BFE1AB600140077 /* CoreDataStack.swift */; };
+		70F4D55A2BFE1DA700140077 /* WLGenre+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5562BFE1DA700140077 /* WLGenre+CoreDataClass.swift */; };
+		70F4D55B2BFE1DA700140077 /* WLGenre+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5572BFE1DA700140077 /* WLGenre+CoreDataProperties.swift */; };
+		70F4D55C2BFE1DA700140077 /* WLMovie+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5582BFE1DA700140077 /* WLMovie+CoreDataClass.swift */; };
+		70F4D55D2BFE1DA700140077 /* WLMovie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5592BFE1DA700140077 /* WLMovie+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -174,6 +180,12 @@
 		70F4D5432BFB2F9D00140077 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		70F4D5452BFB2FE700140077 /* SearchEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEndpoint.swift; sourceTree = "<group>"; };
 		70F4D5472BFB30F100140077 /* SearchViewController+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchViewController+DataSource.swift"; sourceTree = "<group>"; };
+		70F4D54A2BFDF54800140077 /* DatShin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DatShin.xcdatamodel; sourceTree = "<group>"; };
+		70F4D54C2BFE1AB600140077 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		70F4D5562BFE1DA700140077 /* WLGenre+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WLGenre+CoreDataClass.swift"; sourceTree = "<group>"; };
+		70F4D5572BFE1DA700140077 /* WLGenre+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WLGenre+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		70F4D5582BFE1DA700140077 /* WLMovie+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WLMovie+CoreDataClass.swift"; sourceTree = "<group>"; };
+		70F4D5592BFE1DA700140077 /* WLMovie+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WLMovie+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,7 +204,13 @@
 		70093DD72BF62FF30048D12D /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				70F4D5562BFE1DA700140077 /* WLGenre+CoreDataClass.swift */,
+				70F4D5572BFE1DA700140077 /* WLGenre+CoreDataProperties.swift */,
+				70F4D5582BFE1DA700140077 /* WLMovie+CoreDataClass.swift */,
+				70F4D5592BFE1DA700140077 /* WLMovie+CoreDataProperties.swift */,
 				70093DD82BF630030048D12D /* ModelStore.swift */,
+				70F4D5492BFDF54800140077 /* DatShin.xcdatamodeld */,
+				70F4D54C2BFE1AB600140077 /* CoreDataStack.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -619,6 +637,10 @@
 				708D14362BF33B65004F7811 /* NiblessView.swift in Sources */,
 				708D13E62BECA646004F7811 /* TMDbError+TMDbAPIError.swift in Sources */,
 				708D14042BEDDB7C004F7811 /* HomeViewController+DataSource.swift in Sources */,
+				70F4D55A2BFE1DA700140077 /* WLGenre+CoreDataClass.swift in Sources */,
+				70F4D55B2BFE1DA700140077 /* WLGenre+CoreDataProperties.swift in Sources */,
+				70F4D55C2BFE1DA700140077 /* WLMovie+CoreDataClass.swift in Sources */,
+				70F4D55D2BFE1DA700140077 /* WLMovie+CoreDataProperties.swift in Sources */,
 				70093DD62BF62D5B0048D12D /* Section.swift in Sources */,
 				708D13D52BEC8EDC004F7811 /* Constants.swift in Sources */,
 				70093DDF2BF726CF0048D12D /* FeaturedViewCell.swift in Sources */,
@@ -657,6 +679,7 @@
 				708D13BF2BEC8AAB004F7811 /* MoviePageableList.swift in Sources */,
 				708D13A32BEC89C3004F7811 /* Endpoint.swift in Sources */,
 				708D13B62BEC8A17004F7811 /* URL+TMDb.swift in Sources */,
+				70F4D54D2BFE1AB600140077 /* CoreDataStack.swift in Sources */,
 				708D13B12BEC8A17004F7811 /* DateFormatter+TMDb.swift in Sources */,
 				708D13A72BEC89F8004F7811 /* DataParser.swift in Sources */,
 				708D14422BF37DA7004F7811 /* FavoriteCell.swift in Sources */,
@@ -677,6 +700,7 @@
 				708D13E92BECA65C004F7811 /* HTTPRequest.swift in Sources */,
 				708D13E02BECA4F3004F7811 /* MoviesRowHeaderSupplementaryView.swift in Sources */,
 				70093DD42BF4B1DE0048D12D /* UICollectionView+Extensions.swift in Sources */,
+				70F4D54B2BFDF54800140077 /* DatShin.xcdatamodeld in Sources */,
 				70BB40242BF75D750017A7E8 /* PagingSectionFooterView.swift in Sources */,
 				708D140C2BEF694E004F7811 /* MovieDetailViewController.swift in Sources */,
 				708D13CA2BEC8BBD004F7811 /* HomeViewController.swift in Sources */,
@@ -922,6 +946,20 @@
 			productName = NukeExtensions;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		70F4D5492BFDF54800140077 /* DatShin.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				70F4D54A2BFDF54800140077 /* DatShin.xcdatamodel */,
+			);
+			currentVersion = 70F4D54A2BFDF54800140077 /* DatShin.xcdatamodel */;
+			name = DatShin.xcdatamodeld;
+			path = /Users/kaungkhantsithu/Documents/UIKit/DatShin/DatShin/Store/DatShin.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 708D13712BEC85A2004F7811 /* Project object */;
 }

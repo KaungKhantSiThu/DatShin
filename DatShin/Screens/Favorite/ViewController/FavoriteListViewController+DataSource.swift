@@ -48,27 +48,41 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
         
-        let favorite = favorites[indexPath.row]
+        let wlMovie = favorites[indexPath.row]
         
-        PersistenceManager.updateWith(favorite: favorite, actionType: .remove) { [weak self] error in
-            guard let self = self else { return }
-            guard let error = error else {
-                favorites.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .left)
-                if favorites.isEmpty {
-                    //                    self.showEmptyStateView(with: "No favorites?", in: self.view)
-                    
-                }
-                return
-            }
-            
-            self.presentDSAlertOnMainThread(title: "Unable to remove", message: error.localizedDescription, buttonTitle: "Ok")
+        coreDataStack.managedContext.delete(wlMovie)
+        
+        coreDataStack.saveContext()
+        
+        favorites.remove(at: indexPath.row)
+        
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+        
+        if favorites.isEmpty {
+            self.presentDSAlertOnMainThread(title: "Watchlist is Empty", message: "Go bookmark something", buttonTitle: "Ok")
         }
+        
+        //
+//        PersistenceManager.updateWith(favorite: favorite, actionType: .remove) { [weak self] error in
+//            guard let self = self else { return }
+//            guard let error = error else {
+//                favorites.remove(at: indexPath.row)
+//                tableView.deleteRows(at: [indexPath], with: .left)
+//                if favorites.isEmpty {
+//                    //                    self.showEmptyStateView(with: "No favorites?", in: self.view)
+//                    
+//                }
+//                return
+//            }
+//            
+//            self.presentDSAlertOnMainThread(title: "Unable to remove", message: error.localizedDescription, buttonTitle: "Ok")
+//        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let movie = favorites[indexPath.row]
-        let destinationVC = MovieDetailViewController(viewModel: .init(id: movie.id, fetcherService: fetcherService))
+        let id = Int(movie.id)
+        let destinationVC = MovieDetailViewController(viewModel: .init(id: id, fetcherService: fetcherService))
 
         navigationController?.pushViewController(destinationVC, animated: true)
     }

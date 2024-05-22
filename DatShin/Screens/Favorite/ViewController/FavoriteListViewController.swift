@@ -8,6 +8,7 @@
 import UIKit
 import Nuke
 import NukeExtensions
+import CoreData
 
 class FavoriteListViewController: DSDataLoadingViewController {
     
@@ -15,9 +16,11 @@ class FavoriteListViewController: DSDataLoadingViewController {
 //    var dataSource: DataSource! = nil
 //    var currentSnapshot: Snapshot! = nil
     
-    var favorites: [FavoriteMovie] = []
+    var favorites: [WLMovie] = []
     
     let fetcherService: MoviesFetcherService
+    
+    lazy var coreDataStack = CoreDataStack(modelName: "DatShin")
     
     init(fetcherService: MoviesFetcherService) {
         self.fetcherService = fetcherService
@@ -109,28 +112,47 @@ extension FavoriteListViewController {
 //    }
     
     func getFavorites() {
-        PersistenceManager.retrieveFavorites { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-                
-            case .success(let favorites):
-                if favorites.isEmpty {
-                    let v = UIView()
-                    v.backgroundColor = .systemGray
-                    v.frame = self.view.frame
-                    self.view.addSubview(v)
-                } else {
-                    self.favorites = favorites
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        self.view.bringSubviewToFront(self.tableView)
-                    }
+//        PersistenceManager.retrieveFavorites { [weak self] result in
+//            guard let self = self else { return }
+//            
+//            switch result {
+//                
+//            case .success(let favorites):
+//                if favorites.isEmpty {
+//                    let v = UIView()
+//                    v.backgroundColor = .systemGray
+//                    v.frame = self.view.frame
+//                    self.view.addSubview(v)
+//                } else {
+//                    self.favorites = favorites
+//                    DispatchQueue.main.async {
+//                        self.tableView.reloadData()
+//                        self.view.bringSubviewToFront(self.tableView)
+//                    }
+//                }
+//                
+//            case .failure(let error):
+//                self.presentDSAlertOnMainThread(title: "Something went wrong", message: error.localizedDescription, buttonTitle: "Ok")
+//            }
+//        }
+        
+        let moviesFetch: NSFetchRequest = WLMovie.fetchRequest()
+        
+        do {
+            let results = try coreDataStack.managedContext.fetch(moviesFetch)
+            if results.isEmpty {
+                self.presentDSAlertOnMainThread(title: "Watchlist is Empty", message: "Go bookmark something", buttonTitle: "Ok")
+            } else {
+                self.favorites = results
+//                    .map {
+//                    return Movie(id: Int($0.id), title: $0.title ?? "", posterPath: $0.posterPath)
+//                }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
                 }
-                
-            case .failure(let error):
-                self.presentDSAlertOnMainThread(title: "Something went wrong", message: error.localizedDescription, buttonTitle: "Ok")
             }
+        } catch let error as NSError {
+            self.presentDSAlertOnMainThread(title: "Something went wrong", message: error.localizedDescription, buttonTitle: "Ok")
         }
     }
     
