@@ -10,11 +10,12 @@ import UIKit
 class TabBarController: UITabBarController {
     
     let fetcherService = MoviesFetcherService(requestManager: RequestManager())
+    let searchService = SearchService(requestManager: RequestManager())
 
     override func viewDidLoad() {
         super.viewDidLoad()
         UITabBar.appearance().tintColor = .systemGreen
-        viewControllers = [createMoviesNC(), createFavoritesNC()]
+        viewControllers = [createMoviesNC(), createFavoritesNC(), createSearchNC()]
     }
     
     func createMoviesNC() -> UINavigationController {
@@ -30,6 +31,14 @@ class TabBarController: UITabBarController {
         favoritesVC.title = "Favorites"
         favoritesVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
         let nc = UINavigationController(rootViewController: favoritesVC)
+        return nc
+    }
+    
+    func createSearchNC() -> UINavigationController {
+        let searchVC = SearchViewController(service: searchService)
+        searchVC.title = "Search"
+        searchVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 2)
+        let nc = UINavigationController(rootViewController: searchVC)
         return nc
     }
     

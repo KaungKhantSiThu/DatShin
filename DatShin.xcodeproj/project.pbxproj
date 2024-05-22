@@ -83,6 +83,12 @@
 		708D14462BF398CE004F7811 /* DSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D14452BF398CE004F7811 /* DSError.swift */; };
 		70BB40242BF75D750017A7E8 /* PagingSectionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BB40232BF75D750017A7E8 /* PagingSectionFooterView.swift */; };
 		70BB40262BF75DD80017A7E8 /* PagingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BB40252BF75DD80017A7E8 /* PagingInfo.swift */; };
+		70F4D53D2BFA5BE900140077 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D53C2BFA5BE900140077 /* SearchViewController.swift */; };
+		70F4D53F2BFA5CFC00140077 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D53E2BFA5CFC00140077 /* SearchCell.swift */; };
+		70F4D5422BFB2F5900140077 /* SearchFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5412BFB2F5900140077 /* SearchFetcher.swift */; };
+		70F4D5442BFB2F9D00140077 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5432BFB2F9D00140077 /* SearchService.swift */; };
+		70F4D5462BFB2FE700140077 /* SearchEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5452BFB2FE700140077 /* SearchEndpoint.swift */; };
+		70F4D5482BFB30F100140077 /* SearchViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5472BFB30F100140077 /* SearchViewController+DataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -162,6 +168,12 @@
 		708D14452BF398CE004F7811 /* DSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSError.swift; sourceTree = "<group>"; };
 		70BB40232BF75D750017A7E8 /* PagingSectionFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingSectionFooterView.swift; sourceTree = "<group>"; };
 		70BB40252BF75DD80017A7E8 /* PagingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingInfo.swift; sourceTree = "<group>"; };
+		70F4D53C2BFA5BE900140077 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		70F4D53E2BFA5CFC00140077 /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
+		70F4D5412BFB2F5900140077 /* SearchFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFetcher.swift; sourceTree = "<group>"; };
+		70F4D5432BFB2F9D00140077 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
+		70F4D5452BFB2FE700140077 /* SearchEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEndpoint.swift; sourceTree = "<group>"; };
+		70F4D5472BFB30F100140077 /* SearchViewController+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchViewController+DataSource.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +210,7 @@
 		70093DDB2BF7251D0048D12D /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				70F4D5352BFA5B8A00140077 /* Search */,
 				708D14392BF37A2F004F7811 /* Favorite */,
 				708D13C42BEC8B17004F7811 /* Home */,
 			);
@@ -294,6 +307,7 @@
 			isa = PBXGroup;
 			children = (
 				708D13C22BEC8AE1004F7811 /* MoviesEndpoint.swift */,
+				70F4D5452BFB2FE700140077 /* SearchEndpoint.swift */,
 			);
 			path = Endpoints;
 			sourceTree = "<group>";
@@ -418,11 +432,10 @@
 		708D14392BF37A2F004F7811 /* Favorite */ = {
 			isa = PBXGroup;
 			children = (
+				70F4D5392BFA5BBC00140077 /* ViewController */,
 				708D143E2BF37B06004F7811 /* Model */,
 				708D143D2BF37B00004F7811 /* ViewModel */,
 				708D143C2BF37AF5004F7811 /* View */,
-				708D143A2BF37A4D004F7811 /* FavoriteListViewController.swift */,
-				708D143F2BF37C3F004F7811 /* FavoriteListViewController+DataSource.swift */,
 			);
 			path = Favorite;
 			sourceTree = "<group>";
@@ -448,6 +461,59 @@
 			children = (
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		70F4D5352BFA5B8A00140077 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				70F4D5402BFB2F4600140077 /* ViewModel */,
+				70F4D5382BFA5BAC00140077 /* Model */,
+				70F4D5372BFA5BA600140077 /* View */,
+				70F4D5362BFA5B9800140077 /* ViewController */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		70F4D5362BFA5B9800140077 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				70F4D53C2BFA5BE900140077 /* SearchViewController.swift */,
+				70F4D5472BFB30F100140077 /* SearchViewController+DataSource.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		70F4D5372BFA5BA600140077 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				70F4D53E2BFA5CFC00140077 /* SearchCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		70F4D5382BFA5BAC00140077 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		70F4D5392BFA5BBC00140077 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				708D143A2BF37A4D004F7811 /* FavoriteListViewController.swift */,
+				708D143F2BF37C3F004F7811 /* FavoriteListViewController+DataSource.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		70F4D5402BFB2F4600140077 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				70F4D5412BFB2F5900140077 /* SearchFetcher.swift */,
+				70F4D5432BFB2F9D00140077 /* SearchService.swift */,
+			);
+			name = ViewModel;
 			sourceTree = "<group>";
 		};
 		70F97E882BF8EC34008AB206 /* Cells */ = {
@@ -549,15 +615,18 @@
 				708D14462BF398CE004F7811 /* DSError.swift in Sources */,
 				708D14312BF26E5C004F7811 /* ImageHeaderView.swift in Sources */,
 				708D13B22BEC8A17004F7811 /* JSONDecoder+TMDb.swift in Sources */,
+				70F4D5442BFB2F9D00140077 /* SearchService.swift in Sources */,
 				708D14362BF33B65004F7811 /* NiblessView.swift in Sources */,
 				708D13E62BECA646004F7811 /* TMDbError+TMDbAPIError.swift in Sources */,
 				708D14042BEDDB7C004F7811 /* HomeViewController+DataSource.swift in Sources */,
 				70093DD62BF62D5B0048D12D /* Section.swift in Sources */,
 				708D13D52BEC8EDC004F7811 /* Constants.swift in Sources */,
 				70093DDF2BF726CF0048D12D /* FeaturedViewCell.swift in Sources */,
+				70F4D5422BFB2F5900140077 /* SearchFetcher.swift in Sources */,
 				708D14442BF39812004F7811 /* PersistenceManager.swift in Sources */,
 				708D13B52BEC8A17004F7811 /* URL+QueryItem.swift in Sources */,
 				708D13812BEC85A2004F7811 /* ViewController.swift in Sources */,
+				70F4D53D2BFA5BE900140077 /* SearchViewController.swift in Sources */,
 				708D13DE2BEC931A004F7811 /* ImageLoader.swift in Sources */,
 				708D13F52BECD197004F7811 /* DSDataLoadingViewController.swift in Sources */,
 				708D13BA2BEC8A4C004F7811 /* LocaleProvider.swift in Sources */,
@@ -572,6 +641,7 @@
 				708D13B32BEC8A17004F7811 /* JSONEncoder+TMDb.swift in Sources */,
 				708D13A12BEC8997004F7811 /* RequestManager.swift in Sources */,
 				708D13932BEC8762004F7811 /* Movie.swift in Sources */,
+				70F4D5482BFB30F100140077 /* SearchViewController+DataSource.swift in Sources */,
 				708D14022BED157E004F7811 /* TabBarController.swift in Sources */,
 				708D137F2BEC85A2004F7811 /* SceneDelegate.swift in Sources */,
 				708D139C2BEC8879004F7811 /* MoviesFetcherService.swift in Sources */,
@@ -579,7 +649,9 @@
 				708D13DC2BEC91E7004F7811 /* DSSecondaryTitleLabel.swift in Sources */,
 				708D13DA2BEC90F1004F7811 /* DSTitleLabel.swift in Sources */,
 				708D13ED2BECA667004F7811 /* TMDbAPIError.swift in Sources */,
+				70F4D5462BFB2FE700140077 /* SearchEndpoint.swift in Sources */,
 				70093DE12BF729890048D12D /* FeaturedPropertiesView.swift in Sources */,
+				70F4D53F2BFA5CFC00140077 /* SearchCell.swift in Sources */,
 				708D13EA2BECA65C004F7811 /* HTTPResponse.swift in Sources */,
 				708D13EE2BECA667004F7811 /* TMDbAPIError+HTTPStatusCode.swift in Sources */,
 				708D13BF2BEC8AAB004F7811 /* MoviePageableList.swift in Sources */,

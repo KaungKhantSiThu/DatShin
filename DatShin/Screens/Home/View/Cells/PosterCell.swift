@@ -50,7 +50,7 @@ class PosterCell: UICollectionViewCell, SelfConfiguringCell {
         
         ratingLabel.font = .preferredFont(forTextStyle: .caption2)
         ratingLabel.textColor = .secondaryLabel
-        titleLabel.numberOfLines = 1
+        ratingLabel.numberOfLines = 1
         
         let configuration = UIImage.SymbolConfiguration(weight: .medium)
         let ratingSymbol = UIImage(systemName: "star.fill", withConfiguration: configuration)
