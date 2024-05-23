@@ -8,18 +8,13 @@
 import UIKit
 
 class SearchViewController: DSDataLoadingViewController {
-        
-    var tableView: UITableView! = nil
-    var dataSource: DataSource! = nil
 
 //    var collectionViewDataSource: UICollectionViewDiffableDataSource<Section, Int>! = nil
 //    var collectionView: UICollectionView! = nil
     
-    lazy var searchController = UISearchController()
-    
+    lazy var searchController: UISearchController! = nil
+    var filteredMovies: [Movie] = []
     let service: SearchService
-    
-    var movies: [Movie] = []
     
     private var loadingTask: Task<Void, Never>?
     
@@ -36,11 +31,9 @@ class SearchViewController: DSDataLoadingViewController {
         super.loadView()
         configureViewController()
         configureHierarchy()
-        setUpDataSource()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Do any additional setup after loading the view.
     }
     
@@ -59,53 +52,23 @@ extension SearchViewController {
     }
     
     func configureHierarchy() {
+
+        let searchResultsController = SearchResultsController()
+        
+        searchController = UISearchController(searchResultsController: searchResultsController)
+        searchController.searchResultsUpdater = self
         searchController.searchBar.searchBarStyle = .default
         searchController.searchBar.placeholder = "Movies"
-        searchController.searchResultsUpdater = self
+        
         
         navigationItem.searchController = searchController
         
-        tableView = UITableView(frame: .zero)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .systemBackground
-//        tableView.estimatedRowHeight = 250
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.delegate = self
-        tableView.register(SearchCell.self, forCellReuseIdentifier: SearchCell.reuseIdentifier)
-        view.addSubview(tableView)
-        
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-    }
-    
-    func setUpDataSource() {
-        dataSource = DataSource(tableView: tableView) { (tableView, indexPath, item) in
-            let cell = tableView.dequeueReusableCell(withIdentifier: SearchCell.reuseIdentifier, for: indexPath)
-            
-            if let cell = cell as? SearchCell {
-                cell.configure(with: item)
-            }
-            return cell
-        }
-    }
-    
-    func updateDataSource() {
-        guard let dataSource = tableView.dataSource as? DataSource else { return }
-        
-        var snapshot = Snapshot()
-        snapshot.appendSections(Section.allCases)
-        snapshot.appendItems(movies, toSection: .movie)
-        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else { return }
+        guard let text = searchController.searchBar.text, !text.isEmpty else { return }
         loadingTask?.cancel()
         loadingTask = Task {
             // Simulate network delay
@@ -116,8 +79,10 @@ extension SearchViewController: UISearchResultsUpdating {
             
             do {
                 print("Fetching Search Results (Movie)")
-                movies = try await service.fetchMovies(query: text)
-                updateDataSource()
+                filteredMovies = try await service.fetchMovies(query: text)
+                if let resultsController = searchController.searchResultsController as? SearchResultsController {
+                    resultsController.update(with: filteredMovies)
+                }
             } catch {
                 presentDSAlertOnMainThread(title: "Search failed", message: error.localizedDescription, buttonTitle: "Ok")
             }

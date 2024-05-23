@@ -6,13 +6,3 @@
 //
 
 import UIKit
-
-extension SearchViewController: UITableViewDelegate {
-    
-    typealias DataSource = UITableViewDiffableDataSource<Section, Movie>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Movie>
-    
-    enum Section: CaseIterable {
-        case movie
-    }
-}
