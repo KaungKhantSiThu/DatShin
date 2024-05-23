@@ -13,7 +13,7 @@ class SearchCell: UITableViewCell, SelfConfiguringCell {
     static var reuseIdentifier: String { String(describing: Self.self) }
     
     let posterImageView = UIImageView(frame: .zero)
-    let titleLabel = DSTitleLabel(textAlignment: .left, fontSize: 16)
+    let titleLabel = UILabel()
     private let ratingLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -28,13 +28,16 @@ class SearchCell: UITableViewCell, SelfConfiguringCell {
         
         contentView.addSubview(posterImageView)
         
+        titleLabel.font = .preferredFont(forTextStyle: .headline)
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
-        
-        ratingLabel.font = .preferredFont(forTextStyle: .caption2)
+        titleLabel.adjustsFontSizeToFitWidth = true
+
+        ratingLabel.font = .preferredFont(forTextStyle: .subheadline)
         ratingLabel.textColor = .secondaryLabel
         ratingLabel.numberOfLines = 0
         
-        let configuration = UIImage.SymbolConfiguration(weight: .medium)
+        let configuration = UIImage.SymbolConfiguration(weight: .regular)
         let ratingSymbol = UIImage(systemName: "star.fill", withConfiguration: configuration)
         let ratingImage = UIImageView(image: ratingSymbol)
         ratingImage.tintColor = .systemYellow
@@ -69,11 +72,10 @@ class SearchCell: UITableViewCell, SelfConfiguringCell {
             posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 1.5),
 
             captionStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
-            captionStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
+            captionStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -padding),
 
             captionStack.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: padding),
             captionStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-//            captionStack.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     

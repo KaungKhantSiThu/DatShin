@@ -31,6 +31,7 @@ class PosterCell: UICollectionViewCell, SelfConfiguringCell {
     
     private func configure() {
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .gray
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 10
         
@@ -44,15 +45,15 @@ class PosterCell: UICollectionViewCell, SelfConfiguringCell {
         rankLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(rankLabel)
         
-        titleLabel.font = .preferredFont(forTextStyle: .caption1)
+        titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.textColor = .label
         titleLabel.numberOfLines = 1
         
-        ratingLabel.font = .preferredFont(forTextStyle: .caption2)
+        ratingLabel.font = .preferredFont(forTextStyle: .subheadline)
         ratingLabel.textColor = .secondaryLabel
         ratingLabel.numberOfLines = 1
         
-        let configuration = UIImage.SymbolConfiguration(weight: .medium)
+        let configuration = UIImage.SymbolConfiguration(weight: .regular)
         let ratingSymbol = UIImage(systemName: "star.fill", withConfiguration: configuration)
         let ratingImage = UIImageView(image: ratingSymbol)
         ratingImage.tintColor = .systemYellow

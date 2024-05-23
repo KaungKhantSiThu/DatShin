@@ -54,16 +54,12 @@ class MovieDetailViewModel {
     
     func addToWatchlist() {
         guard let movie = movie, !itemExists(movie.id) else { return }
-        //        PersistenceManager.updateWith(favorite: FavoriteMovie(id: movie.id, title: title, posterPath: movie.posterPath), actionType: .add) { [weak self] error in
-        //            if let error = error {
-        //                self?.error = error
-        //            }
-        //        }
+
         let wlMovie = WLMovie(context: coreDataStack.managedContext)
         wlMovie.id = Int32(movie.id)
         wlMovie.title = movie.title
-        wlMovie.saveDate = Date()
-        wlMovie.posterPath = movie.posterPath
+        wlMovie.savedAt = Date()
+        wlMovie.posterPath = movie.posterPath!
         wlMovie.hasWatched = false
         
         if let genres = movie.genres {
@@ -80,8 +76,8 @@ class MovieDetailViewModel {
     }
     
     func itemExists(_ id: Movie.ID) -> Bool {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "WLMovie")
-        fetchRequest.predicate = NSPredicate(format: "id == %d", Int32(id))
-        return ((try? coreDataStack.managedContext.count(for: fetchRequest)) ?? 0) > 0
+        let request = WLMovie.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %d", Int32(id))
+        return ((try? coreDataStack.managedContext.count(for: request)) ?? 0) > 0
     }
 }

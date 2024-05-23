@@ -10,34 +10,20 @@ import NukeExtensions
 import Nuke
 
 extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    //    enum Category: CaseIterable {
-    //        case bookmark
-    //    }
-    //    // MARK: - Value Types
-    //    typealias DataSource = UITableViewDiffableDataSource<Category, FavoriteMovie>
-    //    typealias Snapshot = NSDiffableDataSourceSnapshot<Category, FavoriteMovie>
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return favorites.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCell")  as! FavoriteCell
-//        let cell = UITableViewCell()
-//        var content = cell.defaultContentConfiguration()
         let movie = favorites[indexPath.row]
-        //        ImageLoader.shared.downloadImage(from: movie.posterPath, as: .poster) { image in
-        //            DispatchQueue.main.async {
-        //                cell.posterImageView.image = image
-        //            }
-        //        }
-        //        let request = self.makeRequest(with: imageURL, cellSize: cell.bounds.size)
-        //        let options = self.makeImageLoadingOptions()
-        
-//        content.text = movie.title
-//        content.image = UIImage(systemName: "popcorn")
         
         cell.titleLabel.text = movie.title
+
+        if let genres = movie.genres.allObjects as? [WLGenre] {
+            cell.genresLabel.text = genres.map { $0.name }.joined(separator: " * ")
+        }
         let imageURL = ImageLoader.shared.generateFullURL(from: movie.posterPath, as: .poster, idealWidth: 60)
         let request = self.makeRequest(with: imageURL, cellSize: cell.bounds.size)
         let options = self.makeImageLoadingOptions()
@@ -50,7 +36,10 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         
         let wlMovie = favorites[indexPath.row]
         
+
+        
         coreDataStack.managedContext.delete(wlMovie)
+        
         
         coreDataStack.saveContext()
         
@@ -61,22 +50,6 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         if favorites.isEmpty {
             self.presentDSAlertOnMainThread(title: "Watchlist is Empty", message: "Go bookmark something", buttonTitle: "Ok")
         }
-        
-        //
-//        PersistenceManager.updateWith(favorite: favorite, actionType: .remove) { [weak self] error in
-//            guard let self = self else { return }
-//            guard let error = error else {
-//                favorites.remove(at: indexPath.row)
-//                tableView.deleteRows(at: [indexPath], with: .left)
-//                if favorites.isEmpty {
-//                    //                    self.showEmptyStateView(with: "No favorites?", in: self.view)
-//                    
-//                }
-//                return
-//            }
-//            
-//            self.presentDSAlertOnMainThread(title: "Unable to remove", message: error.localizedDescription, buttonTitle: "Ok")
-//        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -8,12 +8,14 @@
 import UIKit
 
 class SearchViewController: DSDataLoadingViewController {
-    
+        
     var tableView: UITableView! = nil
     var dataSource: DataSource! = nil
+
+//    var collectionViewDataSource: UICollectionViewDiffableDataSource<Section, Int>! = nil
+//    var collectionView: UICollectionView! = nil
     
     lazy var searchController = UISearchController()
-    
     
     let service: SearchService
     
@@ -57,7 +59,6 @@ extension SearchViewController {
     }
     
     func configureHierarchy() {
-        
         searchController.searchBar.searchBarStyle = .default
         searchController.searchBar.placeholder = "Movies"
         searchController.searchResultsUpdater = self

@@ -26,8 +26,9 @@ class MovieDetailRootView: NiblessView {
         let label = UILabel()
         label.textColor = .secondaryLabel
         label.text = ""
-        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -38,6 +39,7 @@ class MovieDetailRootView: NiblessView {
         label.text = ""
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -48,6 +50,7 @@ class MovieDetailRootView: NiblessView {
         label.text = ""
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
         return label
     }()

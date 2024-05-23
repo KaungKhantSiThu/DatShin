@@ -17,11 +17,11 @@ extension WLMovie {
     }
 
     @NSManaged public var id: Int32
-    @NSManaged public var title: String?
-    @NSManaged public var posterPath: URL?
-    @NSManaged public var saveDate: Date?
+    @NSManaged public var title: String
+    @NSManaged public var posterPath: URL
+    @NSManaged public var savedAt: Date
     @NSManaged public var hasWatched: Bool
-    @NSManaged public var genres: NSSet?
+    @NSManaged public var genres: NSSet
 
 }
 
