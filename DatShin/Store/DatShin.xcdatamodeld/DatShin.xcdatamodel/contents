@@ -5,12 +5,12 @@
         <attribute name="name" attributeType="String"/>
         <relationship name="movies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WLMovie" inverseName="genres" inverseEntity="WLMovie"/>
     </entity>
-    <entity name="WLMovie" representedClassName=".WLMovie" syncable="YES">
+    <entity name="WLMovie" representedClassName=".WLMovie" syncable="YES" coreSpotlightDisplayNameExpression="title">
         <attribute name="hasWatched" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="posterPath" attributeType="URI"/>
         <attribute name="savedAt" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="title" attributeType="String"/>
+        <attribute name="title" attributeType="String" spotlightIndexingEnabled="YES"/>
         <relationship name="genres" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WLGenre" inverseName="movies" inverseEntity="WLGenre"/>
     </entity>
 </model>

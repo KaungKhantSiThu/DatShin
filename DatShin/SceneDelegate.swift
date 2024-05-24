@@ -6,10 +6,19 @@
 //
 
 import UIKit
+import CoreSpotlight
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+//              let userInfo = userActivity.userInfo as? [String: Any],
+//              let identifier = userInfo[CSSearchableItemActivityIdentifier] as? String else {
+//                  return
+//              }
+    }
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {

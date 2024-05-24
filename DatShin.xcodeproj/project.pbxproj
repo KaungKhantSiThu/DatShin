@@ -97,6 +97,7 @@
 		70F4D55D2BFE1DA700140077 /* WLMovie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5592BFE1DA700140077 /* WLMovie+CoreDataProperties.swift */; };
 		70F4D5692BFF81D500140077 /* SearchViewController+UISearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D5682BFF81D400140077 /* SearchViewController+UISearchBarDelegate.swift */; };
 		70F4D56B2BFF926A00140077 /* SearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D56A2BFF926A00140077 /* SearchResultsController.swift */; };
+		70F4D56D2C00610F00140077 /* MoviesSpotlightDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F4D56C2C00610F00140077 /* MoviesSpotlightDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -190,6 +191,7 @@
 		70F4D5592BFE1DA700140077 /* WLMovie+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WLMovie+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		70F4D5682BFF81D400140077 /* SearchViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
 		70F4D56A2BFF926A00140077 /* SearchResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsController.swift; sourceTree = "<group>"; };
+		70F4D56C2C00610F00140077 /* MoviesSpotlightDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesSpotlightDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +217,7 @@
 				70093DD82BF630030048D12D /* ModelStore.swift */,
 				70F4D5492BFDF54800140077 /* DatShin.xcdatamodeld */,
 				70F4D54C2BFE1AB600140077 /* CoreDataStack.swift */,
+				70F4D56C2C00610F00140077 /* MoviesSpotlightDelegate.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -704,6 +707,7 @@
 				708D13FB2BECDE51004F7811 /* DSBodyLabel.swift in Sources */,
 				708D14402BF37C3F004F7811 /* FavoriteListViewController+DataSource.swift in Sources */,
 				708D14002BECDFB8004F7811 /* UIViewController+Extensions.swift in Sources */,
+				70F4D56D2C00610F00140077 /* MoviesSpotlightDelegate.swift in Sources */,
 				708D14062BEF2E93004F7811 /* HomeViewController+ImagePrefetching.swift in Sources */,
 				708D13E92BECA65C004F7811 /* HTTPRequest.swift in Sources */,
 				708D13E02BECA4F3004F7811 /* MoviesRowHeaderSupplementaryView.swift in Sources */,
@@ -781,7 +785,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -838,7 +842,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -855,13 +859,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8HX35UD83V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DatShin/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -885,13 +890,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8HX35UD83V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DatShin/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

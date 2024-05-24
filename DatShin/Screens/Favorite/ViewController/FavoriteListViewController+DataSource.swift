@@ -22,7 +22,7 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         cell.titleLabel.text = movie.title
 
         if let genres = movie.genres.allObjects as? [WLGenre] {
-            cell.genresLabel.text = genres.map { $0.name }.joined(separator: " * ")
+            cell.genresLabel.text = genres.map { $0.name }.joined(separator: " ")
         }
         let imageURL = ImageLoader.shared.generateFullURL(from: movie.posterPath, as: .poster, idealWidth: 60)
         let request = self.makeRequest(with: imageURL, cellSize: cell.bounds.size)

@@ -20,6 +20,13 @@ class FavoriteListViewController: DSDataLoadingViewController {
     
     lazy var coreDataStack = CoreDataStack(modelName: "DatShin")
     
+    var spotlightUpdateObserver: NSObjectProtocol?
+    
+    private lazy var spotlightIndexer: MoviesSpotlightDelegate = {
+        return coreDataStack.spotlightIndexer!
+    }()
+
+    
     init(fetcherService: MoviesFetcherService) {
         self.fetcherService = fetcherService
         super.init(nibName: nil, bundle: nil)
@@ -32,7 +39,12 @@ class FavoriteListViewController: DSDataLoadingViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getFavorites()
-        
+        spotlightIndexing(enabled: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        spotlightIndexing(enabled: false)
     }
     
     override func viewDidLoad() {
@@ -86,6 +98,37 @@ extension FavoriteListViewController {
             }
         } catch let error as NSError {
             self.presentDSAlertOnMainThread(title: "Something went wrong", message: error.localizedDescription, buttonTitle: "Ok")
+        }
+    }
+    
+    private func spotlightIndexing(enabled: Bool) {
+        if enabled {
+            spotlightIndexer.startSpotlightIndexing()
+//            startStopIndexingItem.image = UIImage(systemName: "pause")
+        } else {
+            spotlightIndexer.stopSpotlightIndexing()
+//            startStopIndexingItem.image = UIImage(systemName: "play")
+        }
+
+        let center = NotificationCenter.default
+        if spotlightIndexer.isIndexingEnabled && spotlightUpdateObserver == nil {
+            let queue = OperationQueue.main
+            spotlightUpdateObserver = center.addObserver(forName: NSCoreDataCoreSpotlightDelegate.indexDidUpdateNotification,
+                                                         object: nil,
+                                                         queue: queue) { (notification) in
+                let userInfo = notification.userInfo
+                let storeID = userInfo?[NSStoreUUIDKey] as? String
+                let token = userInfo?[NSPersistentHistoryTokenKey] as? NSPersistentHistoryToken
+                if let storeID = storeID, let token = token {
+                    print("Store with identifier \(storeID) has completed ",
+                          "indexing and has processed history token up through \(String(describing: token)).")
+                }
+            }
+        } else {
+            if spotlightUpdateObserver == nil {
+                return
+            }
+            center.removeObserver(spotlightUpdateObserver as Any)
         }
     }
     
