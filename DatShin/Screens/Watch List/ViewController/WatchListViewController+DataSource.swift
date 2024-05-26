@@ -1,5 +1,5 @@
 //
-//  FavoriteListViewController+DataSource.swift
+//  WatchListViewController+DataSource.swift
 //  DatShin
 //
 //  Created by Kaung Khant Si Thu on 14/05/2024.
@@ -9,7 +9,7 @@ import UIKit
 import NukeExtensions
 import Nuke
 
-extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate {
+extension WatchListViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return favorites.count

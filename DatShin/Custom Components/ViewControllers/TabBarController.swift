@@ -27,7 +27,7 @@ class TabBarController: UITabBarController {
     }
     
     func createFavoritesNC() -> UINavigationController {
-        let favoritesVC = FavoriteListViewController(fetcherService: fetcherService)
+        let favoritesVC = WatchListViewController(fetcherService: fetcherService)
         favoritesVC.title = "Watchlist"
         favoritesVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
         let nc = UINavigationController(rootViewController: favoritesVC)

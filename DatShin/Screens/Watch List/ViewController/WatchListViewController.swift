@@ -10,7 +10,7 @@ import Nuke
 import NukeExtensions
 import CoreData
 
-class FavoriteListViewController: DSDataLoadingViewController {
+class WatchListViewController: DSDataLoadingViewController {
     
     var tableView: UITableView! = nil
     
@@ -55,7 +55,7 @@ class FavoriteListViewController: DSDataLoadingViewController {
 
 }
 
-extension FavoriteListViewController {
+extension WatchListViewController {
     func configureViewController() {
         view.backgroundColor = .systemBackground
         title = "Favorites"

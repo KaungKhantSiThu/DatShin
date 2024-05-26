@@ -16,13 +16,13 @@ class MovieDetailRootView: NiblessView {
     let viewModel: MovieDetailViewModel
     var hierarchyNotReady = true
     
-    lazy var imageHeaderView: ImageHeaderView = {
+    private let imageHeaderView: ImageHeaderView = {
         let imageHeaderView = ImageHeaderView()
         imageHeaderView.title = ""
         return imageHeaderView
     }()
     
-    lazy var taglineLabel: UILabel = {
+    private let taglineLabel: UILabel = {
         let label = UILabel()
         label.textColor = .secondaryLabel
         label.text = ""
@@ -33,7 +33,7 @@ class MovieDetailRootView: NiblessView {
         return label
     }()
     
-    lazy var runtimeLabel: UILabel = {
+    private let runtimeLabel: UILabel = {
         let label = UILabel()
         label.textColor = .secondaryLabel
         label.text = ""
@@ -44,18 +44,7 @@ class MovieDetailRootView: NiblessView {
         return label
     }()
     
-    lazy var genresLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .secondaryLabel
-        label.text = ""
-        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
-        return label
-    }()
-    
-    lazy var overviewTextView: UITextView = {
+    private let overviewTextView: UITextView = {
         let overviewTextView = UITextView()
         overviewTextView.textColor = .label
         overviewTextView.font = UIFont.preferredFont(forTextStyle: .body)
@@ -65,25 +54,14 @@ class MovieDetailRootView: NiblessView {
         return overviewTextView
     }()
     
-    
-    // Cast Members and Recommended Movies
-//    lazy var collectionView: UICollectionView = {
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        collectionView.backgroundColor = .systemBackground
-//        return collectionView
-//    }()
-    
     let scrollView = UIScrollView()
-    
+        
     lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
             imageHeaderView,
             taglineLabel,
             runtimeLabel,
-            genresLabel,
             overviewTextView,
-//            collectionView
         ])
         stackView.spacing = 10
         stackView.axis = .vertical
@@ -95,6 +73,7 @@ class MovieDetailRootView: NiblessView {
          viewModel: MovieDetailViewModel) {
         self.viewModel = viewModel
         super.init(frame: frame)
+        
         bindToViewModel()
         print("init")
     }
@@ -107,7 +86,6 @@ class MovieDetailRootView: NiblessView {
         backgroundColor = .systemBackground
         constructHierarchy()
         activateConstraints()
-        //        wireController()
         hierarchyNotReady = false
         print("didMoveToWindow")
     }
@@ -115,6 +93,8 @@ class MovieDetailRootView: NiblessView {
     private func constructHierarchy() {
         scrollView.addSubview(stackView)
         addSubview(scrollView)
+        
+        
     }
     
     func activateConstraints() {
@@ -160,32 +140,27 @@ class MovieDetailRootView: NiblessView {
     func bindToViewModel() {
         
         viewModel.$image
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: imageHeaderView)
             .store(in: &subscriptions)
         
         viewModel.$title
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .assign(to: \.title!, on: imageHeaderView)
             .store(in: &subscriptions)
         
         viewModel.$tagline
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .assign(to: \.text!, on: taglineLabel)
             .store(in: &subscriptions)
         
         viewModel.$runtime
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .assign(to: \.text!, on: runtimeLabel)
             .store(in: &subscriptions)
-        
-        viewModel.$genres
-            .receive(on: RunLoop.main)
-            .assign(to: \.text!, on: genresLabel)
-            .store(in: &subscriptions)
-        
+
         viewModel.$overview
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .assign(to: \.text, on: overviewTextView)
             .store(in: &subscriptions)
         

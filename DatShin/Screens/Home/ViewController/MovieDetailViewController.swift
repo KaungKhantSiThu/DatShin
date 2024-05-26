@@ -6,16 +6,19 @@
 //
 
 import UIKit
-
+import Combine
 //protocol MovieDetailViewControllerDelegate: AnyObject {
 //    func movieDetailViewController(_ viewcontroller: MovieDetailViewController, didTapFavorite: Movie.ID)
 //}
 
 class MovieDetailViewController: DSDataLoadingViewController {
     
-    private var loadingTask: Task<Void, Never>?
+//    private var loadingTask: Task<Void, Never>?
     
     let viewModel: MovieDetailViewModel
+    
+    private var subscriptions = Set<AnyCancellable>()
+
     
     init(viewModel: MovieDetailViewModel) {
         self.viewModel = viewModel
@@ -26,22 +29,22 @@ class MovieDetailViewController: DSDataLoadingViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadingTask = Task {
-            do {
-                try await viewModel.fetch()
-            } catch {
-                presentDSAlertOnMainThread(title: "Movie Fetch failed", message: error.localizedDescription, buttonTitle: "OK")
-            }
-            
-        }
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        loadingTask = Task {
+//            do {
+//                try await viewModel.fetch()
+//            } catch {
+//                presentDSAlertOnMainThread(title: "Movie Fetch failed", message: error.localizedDescription, buttonTitle: "OK")
+//            }
+//            
+//        }
+//    }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        loadingTask?.cancel()
-    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        loadingTask?.cancel()
+//    }
     
     override func loadView() {
         view = MovieDetailRootView(viewModel: viewModel)
@@ -50,9 +53,20 @@ class MovieDetailViewController: DSDataLoadingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        observeErrorMessages()
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(bookmarkTapped))
         navigationItem.rightBarButtonItem = addButton
         
+    }
+    
+    func observeErrorMessages() {
+      viewModel
+            .$error
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] error in
+            guard let error = error else { return }
+            self?.presentDSAlertOnMainThread(title: "Error", message: error.localizedDescription, buttonTitle: "Ok")
+        }.store(in: &subscriptions)
     }
     
     @objc

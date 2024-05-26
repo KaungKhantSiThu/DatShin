@@ -14,15 +14,16 @@ class MovieDetailViewModel {
     // MARK: - Properties
     let fetcherService: MoviesFetcherService
     let id: Movie.ID
-    private var movie: Movie? = nil
+    
+    private var movie: Movie?
     
     @Published var title = ""
     @Published var tagline = ""
     @Published var overview = ""
-    @Published var genres = ""
     @Published var runtime = ""
-    @Published var image: UIImage? = UIImage(systemName: "photo")
+    @Published var image: UIImage?
     
+    @Published var isLoading: Bool = false
     @Published var error: Error?
     
     
@@ -33,22 +34,28 @@ class MovieDetailViewModel {
     init(id: Movie.ID, fetcherService: MoviesFetcherService) {
         self.id = id
         self.fetcherService = fetcherService
+        fetch()
     }
     
-    func fetch() async throws {
-        do {
-            movie = try await fetcherService.fetchDetail(forMovie: id)
-            guard let movie = movie else { return }
-            title = movie.title
-            tagline = movie.tagline ?? "No tagline"
-            overview = movie.overview ?? "No overview"
-            runtime = "\(movie.runtime ?? 0) minutes"
-            genres = movie.genres?.map { $0.name }.joined(separator: " * ") ?? "Not genres"
-            ImageLoader.shared.downloadImage(from: movie.backdropPath, as: .backdrop) { [weak self] image in
-                self?.image = image
+    func fetch() {
+        Task {
+            do {
+                self.isLoading = true
+                let movie = try await fetcherService.fetchDetail(forMovie: id)
+                self.isLoading = false
+                self.movie = movie
+                title = movie.title
+                tagline = movie.tagline ?? "No tagline"
+                overview = movie.overview ?? "No overview"
+                runtime = "\(movie.runtime ?? 0) minutes"
+//                genres = movie.genres?.map { Tag(name: $0.name, color: .gray) } ?? []
+                ImageLoader.shared.downloadImage(from: movie.backdropPath, as: .backdrop) { [weak self] image in
+                    self?.image = image
+                }
+            } catch {
+                self.isLoading = false
+                self.error = error
             }
-        } catch {
-            throw error
         }
     }
     

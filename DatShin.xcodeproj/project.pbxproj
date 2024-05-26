@@ -14,6 +14,8 @@
 		70093DDF2BF726CF0048D12D /* FeaturedViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70093DDE2BF726CF0048D12D /* FeaturedViewCell.swift */; };
 		70093DE12BF729890048D12D /* FeaturedPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70093DE02BF729890048D12D /* FeaturedPropertiesView.swift */; };
 		70093DE32BF7377A0048D12D /* SelfConfiguringCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70093DE22BF7377A0048D12D /* SelfConfiguringCell.swift */; };
+		7076CE932C00903900478B53 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7076CE922C00903900478B53 /* TagView.swift */; };
+		7076CE952C00936A00478B53 /* TagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7076CE942C00936A00478B53 /* TagListView.swift */; };
 		708D137D2BEC85A2004F7811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D137C2BEC85A2004F7811 /* AppDelegate.swift */; };
 		708D137F2BEC85A2004F7811 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D137E2BEC85A2004F7811 /* SceneDelegate.swift */; };
 		708D13812BEC85A2004F7811 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D13802BEC85A2004F7811 /* ViewController.swift */; };
@@ -76,8 +78,8 @@
 		708D14362BF33B65004F7811 /* NiblessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D14332BF33B65004F7811 /* NiblessView.swift */; };
 		708D14372BF33B65004F7811 /* NiblessNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D14342BF33B65004F7811 /* NiblessNavigationController.swift */; };
 		708D14382BF33B65004F7811 /* NiblessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D14352BF33B65004F7811 /* NiblessViewController.swift */; };
-		708D143B2BF37A4D004F7811 /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D143A2BF37A4D004F7811 /* FavoriteListViewController.swift */; };
-		708D14402BF37C3F004F7811 /* FavoriteListViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D143F2BF37C3F004F7811 /* FavoriteListViewController+DataSource.swift */; };
+		708D143B2BF37A4D004F7811 /* WatchListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D143A2BF37A4D004F7811 /* WatchListViewController.swift */; };
+		708D14402BF37C3F004F7811 /* WatchListViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D143F2BF37C3F004F7811 /* WatchListViewController+DataSource.swift */; };
 		708D14422BF37DA7004F7811 /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D14412BF37DA7004F7811 /* FavoriteCell.swift */; };
 		708D14442BF39812004F7811 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D14432BF39812004F7811 /* PersistenceManager.swift */; };
 		708D14462BF398CE004F7811 /* DSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708D14452BF398CE004F7811 /* DSError.swift */; };
@@ -108,6 +110,8 @@
 		70093DDE2BF726CF0048D12D /* FeaturedViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedViewCell.swift; sourceTree = "<group>"; };
 		70093DE02BF729890048D12D /* FeaturedPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedPropertiesView.swift; sourceTree = "<group>"; };
 		70093DE22BF7377A0048D12D /* SelfConfiguringCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfConfiguringCell.swift; sourceTree = "<group>"; };
+		7076CE922C00903900478B53 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		7076CE942C00936A00478B53 /* TagListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListView.swift; sourceTree = "<group>"; };
 		708D13792BEC85A2004F7811 /* DatShin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DatShin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		708D137C2BEC85A2004F7811 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		708D137E2BEC85A2004F7811 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -170,8 +174,8 @@
 		708D14332BF33B65004F7811 /* NiblessView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NiblessView.swift; sourceTree = "<group>"; };
 		708D14342BF33B65004F7811 /* NiblessNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NiblessNavigationController.swift; sourceTree = "<group>"; };
 		708D14352BF33B65004F7811 /* NiblessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NiblessViewController.swift; sourceTree = "<group>"; };
-		708D143A2BF37A4D004F7811 /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
-		708D143F2BF37C3F004F7811 /* FavoriteListViewController+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteListViewController+DataSource.swift"; sourceTree = "<group>"; };
+		708D143A2BF37A4D004F7811 /* WatchListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchListViewController.swift; sourceTree = "<group>"; };
+		708D143F2BF37C3F004F7811 /* WatchListViewController+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WatchListViewController+DataSource.swift"; sourceTree = "<group>"; };
 		708D14412BF37DA7004F7811 /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
 		708D14432BF39812004F7811 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		708D14452BF398CE004F7811 /* DSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSError.swift; sourceTree = "<group>"; };
@@ -228,6 +232,8 @@
 				708D14322BF33B53004F7811 /* NiblessComponents */,
 				708D13F32BECD189004F7811 /* ViewControllers */,
 				70BB40232BF75D750017A7E8 /* PagingSectionFooterView.swift */,
+				7076CE922C00903900478B53 /* TagView.swift */,
+				7076CE942C00936A00478B53 /* TagListView.swift */,
 			);
 			path = "Custom Components";
 			sourceTree = "<group>";
@@ -236,7 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				70F4D5352BFA5B8A00140077 /* Search */,
-				708D14392BF37A2F004F7811 /* Favorite */,
+				708D14392BF37A2F004F7811 /* Watch List */,
 				708D13C42BEC8B17004F7811 /* Home */,
 			);
 			path = Screens;
@@ -454,7 +460,7 @@
 			path = NiblessComponents;
 			sourceTree = "<group>";
 		};
-		708D14392BF37A2F004F7811 /* Favorite */ = {
+		708D14392BF37A2F004F7811 /* Watch List */ = {
 			isa = PBXGroup;
 			children = (
 				70F4D5392BFA5BBC00140077 /* ViewController */,
@@ -462,7 +468,7 @@
 				708D143D2BF37B00004F7811 /* ViewModel */,
 				708D143C2BF37AF5004F7811 /* View */,
 			);
-			path = Favorite;
+			path = "Watch List";
 			sourceTree = "<group>";
 		};
 		708D143C2BF37AF5004F7811 /* View */ = {
@@ -528,8 +534,8 @@
 		70F4D5392BFA5BBC00140077 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				708D143A2BF37A4D004F7811 /* FavoriteListViewController.swift */,
-				708D143F2BF37C3F004F7811 /* FavoriteListViewController+DataSource.swift */,
+				708D143A2BF37A4D004F7811 /* WatchListViewController.swift */,
+				708D143F2BF37C3F004F7811 /* WatchListViewController+DataSource.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -638,7 +644,7 @@
 				708D142F2BF24536004F7811 /* MovieDetailViewModel.swift in Sources */,
 				708D14382BF33B65004F7811 /* NiblessViewController.swift in Sources */,
 				70093DE32BF7377A0048D12D /* SelfConfiguringCell.swift in Sources */,
-				708D143B2BF37A4D004F7811 /* FavoriteListViewController.swift in Sources */,
+				708D143B2BF37A4D004F7811 /* WatchListViewController.swift in Sources */,
 				708D14462BF398CE004F7811 /* DSError.swift in Sources */,
 				708D14312BF26E5C004F7811 /* ImageHeaderView.swift in Sources */,
 				708D13B22BEC8A17004F7811 /* JSONDecoder+TMDb.swift in Sources */,
@@ -700,14 +706,16 @@
 				708D13A52BEC89DE004F7811 /* APIManagerProtocol.swift in Sources */,
 				708D13BC2BEC8A5C004F7811 /* LocaleProviding.swift in Sources */,
 				708D13952BEC87C9004F7811 /* Genre.swift in Sources */,
+				7076CE952C00936A00478B53 /* TagListView.swift in Sources */,
 				708D13F22BECA842004F7811 /* ImagesConfiguration+URLs.swift in Sources */,
 				70093DD92BF630030048D12D /* ModelStore.swift in Sources */,
 				708D13C32BEC8AE1004F7811 /* MoviesEndpoint.swift in Sources */,
 				708D14082BEF3C5F004F7811 /* PosterCell.swift in Sources */,
 				708D13FB2BECDE51004F7811 /* DSBodyLabel.swift in Sources */,
-				708D14402BF37C3F004F7811 /* FavoriteListViewController+DataSource.swift in Sources */,
+				708D14402BF37C3F004F7811 /* WatchListViewController+DataSource.swift in Sources */,
 				708D14002BECDFB8004F7811 /* UIViewController+Extensions.swift in Sources */,
 				70F4D56D2C00610F00140077 /* MoviesSpotlightDelegate.swift in Sources */,
+				7076CE932C00903900478B53 /* TagView.swift in Sources */,
 				708D14062BEF2E93004F7811 /* HomeViewController+ImagePrefetching.swift in Sources */,
 				708D13E92BECA65C004F7811 /* HTTPRequest.swift in Sources */,
 				708D13E02BECA4F3004F7811 /* MoviesRowHeaderSupplementaryView.swift in Sources */,
