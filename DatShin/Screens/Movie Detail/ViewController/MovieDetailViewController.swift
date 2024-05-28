@@ -23,6 +23,8 @@ class MovieDetailViewController: DSDataLoadingViewController {
     init(viewModel: MovieDetailViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: viewModel, action: #selector(MovieDetailViewModel.addToWatchlist))
+        navigationItem.rightBarButtonItem = addButton
     }
     
     required init?(coder: NSCoder) {
@@ -53,10 +55,8 @@ class MovieDetailViewController: DSDataLoadingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        viewModel.fetchData()
         observeErrorMessages()
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(bookmarkTapped))
-        navigationItem.rightBarButtonItem = addButton
-        
     }
     
     func observeErrorMessages() {
@@ -68,9 +68,5 @@ class MovieDetailViewController: DSDataLoadingViewController {
             self?.presentDSAlertOnMainThread(title: "Error", message: error.localizedDescription, buttonTitle: "Ok")
         }.store(in: &subscriptions)
     }
-    
-    @objc
-    func bookmarkTapped() {
-        viewModel.addToWatchlist()
-    }
+
 }

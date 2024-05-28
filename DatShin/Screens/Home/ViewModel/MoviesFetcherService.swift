@@ -45,9 +45,9 @@ extension MoviesFetcherService: MoviesFetcher {
         return try await requestManager.get(endpoint: MoviesEndpoint.details(movieID: movieID))
     }
     
-//    func fetchCastAndCrew(forMovie movieID: Movie.ID) async throws -> ShowCredits {
-//        return try await requestManager.get(endpoint: MoviesEndpoint.credits(movieID: movieID))
-//    }
+    func fetchCastAndCrew(forMovie movieID: Movie.ID) async throws -> ShowCredits {
+        return try await requestManager.get(endpoint: MoviesEndpoint.credits(movieID: movieID))
+    }
     
     func fetchSimilar(toMovie movieID: Movie.ID, page: Int? = nil) async throws -> [Movie] {
         let moviePageableList: MoviePageableList = try await requestManager.get(endpoint: MoviesEndpoint.similar(movieID: movieID, page: page))
