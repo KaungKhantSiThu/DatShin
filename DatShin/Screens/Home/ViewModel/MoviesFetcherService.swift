@@ -53,4 +53,9 @@ extension MoviesFetcherService: MoviesFetcher {
         let moviePageableList: MoviePageableList = try await requestManager.get(endpoint: MoviesEndpoint.similar(movieID: movieID, page: page))
         return moviePageableList.results
     }
+    
+    func fetchShowWatchProvider(forMovie movieID: Movie.ID) async throws -> ShowWatchProvider? {
+        let result: ShowWatchProviderResult = try await requestManager.get(endpoint: MoviesEndpoint.watch(movieID: movieID))
+        return result.results[Locale.current.region?.identifier ?? "us"]
+    }
 }

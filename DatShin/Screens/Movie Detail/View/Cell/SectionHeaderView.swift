@@ -22,14 +22,14 @@ class SectionHeaderView: UICollectionReusableView {
     }
     
     private func setupViews() {
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .title2)
+        titleLabel.font = Appearance.titleFont
         addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

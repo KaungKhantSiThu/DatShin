@@ -19,12 +19,14 @@ class MovieDetailRootView: NiblessView {
     enum Section: Int, CaseIterable {
         case header
         case castMembers
-        //        case relatedMovies
+        case similarMovies
+        case watchProviders
         
         var title: String? {
             switch self {
             case .castMembers: return "Cast & Crew"
-                //            case .relatedMovies: return "Related Movies"
+            case .similarMovies: return "Similar"
+            case .watchProviders: return "Watch Providers"
             default: return nil
             }
         }
@@ -33,7 +35,8 @@ class MovieDetailRootView: NiblessView {
     enum Item: Hashable {
         case header(Movie)
         case castMember(CastMember)
-        //        case relatedMovie(Movie)
+        case similarMovie(Movie)
+        case watchProvider(WatchProvider)
     }
     
     private var collectionView: UICollectionView! = nil
@@ -63,14 +66,23 @@ class MovieDetailRootView: NiblessView {
     
     private func constructHierarchy() {
         let layout = createLayout()
-        collectionView = UICollectionView(frame: bounds, collectionViewLayout: layout)
-        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+//        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.contentInsetAdjustmentBehavior = .never
-        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+        ])
 
         collectionView.register(MovieHeaderCell.self, forCellWithReuseIdentifier: MovieHeaderCell.reuseIdentifier)
         collectionView.register(PersonCell.self, forCellWithReuseIdentifier: PersonCell.reuseIdentifier)
+        collectionView.register(CoverCell.self, forCellWithReuseIdentifier: CoverCell.reuseIdentifier)
+        collectionView.register(StreamingCell.self, forCellWithReuseIdentifier: StreamingCell.reuseIdentifier)
         collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeaderView.reuseIdentifier)
     }
     
@@ -82,8 +94,10 @@ class MovieDetailRootView: NiblessView {
                 return self.createHeaderSection()
             case .castMembers:
                 return self.createListSection()
-                //            case .relatedMovies:
-                //                return self.createListSection()
+            case .similarMovies:
+                return self.createSimilarSection()
+            case .watchProviders:
+                return self.createWatchProviderSection()
             }
         }
     }
@@ -96,6 +110,7 @@ class MovieDetailRootView: NiblessView {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0)
         return section
     }
     
@@ -109,7 +124,41 @@ class MovieDetailRootView: NiblessView {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 10
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        
+        section.boundarySupplementaryItems = [self.createSectionHeader()]
+        return section
+    }
+    
+    private func createSimilarSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25), heightDimension: .fractionalWidth(0.25 * 1.5))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 10
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        
+        section.boundarySupplementaryItems = [self.createSectionHeader()]
+        return section
+    }
+    
+    private func createWatchProviderSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.33))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.93), heightDimension: .fractionalWidth(0.55))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .groupPagingCentered
+
+        section.interGroupSpacing = 10
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
         
         section.boundarySupplementaryItems = [self.createSectionHeader()]
         return section
@@ -131,10 +180,15 @@ class MovieDetailRootView: NiblessView {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PersonCell.reuseIdentifier, for: indexPath) as! PersonCell
                 cell.configure(with: castMember)
                 return cell
-                //            case .relatedMovie(let relatedMovie):
-                //                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RelatedMovieCell.reuseIdentifier, for: indexPath) as! RelatedMovieCell
-                //                cell.configure(with: relatedMovie)
-                //                return cell
+            case .similarMovie(let relatedMovie):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CoverCell.reuseIdentifier, for: indexPath) as! CoverCell
+                cell.configure(with: relatedMovie)
+                return cell
+                
+            case .watchProvider(let watchProvider):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StreamingCell.reuseIdentifier, for: indexPath) as! StreamingCell
+                cell.configure(with: watchProvider)
+                return cell
             }
         }
         
@@ -148,9 +202,9 @@ class MovieDetailRootView: NiblessView {
     
     private func bindViewModel() {
             viewModel.$movie
-                .combineLatest(viewModel.$castMembers)
+            .combineLatest(viewModel.$castMembers, viewModel.$similarMovies, viewModel.$watchProviders)
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] (_, _) in
+                .sink { [weak self] (_, _, _, _) in
                     guard let self = self else { return }
                     self.applySnapshot()
                 }

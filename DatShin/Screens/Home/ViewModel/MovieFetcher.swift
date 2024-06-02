@@ -12,4 +12,5 @@ protocol MoviesFetcher {
     func fetchDetail(forMovie movieID: Movie.ID) async throws -> Movie
     func fetchCastAndCrew(forMovie movieID: Movie.ID) async throws -> ShowCredits
     func fetchSimilar(toMovie movieID: Movie.ID, page: Int?) async throws -> [Movie]
+    func fetchShowWatchProvider(forMovie movieID: Movie.ID) async throws -> ShowWatchProvider?
 }

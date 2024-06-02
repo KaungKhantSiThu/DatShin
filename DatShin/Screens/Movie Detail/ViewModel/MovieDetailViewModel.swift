@@ -16,15 +16,9 @@ class MovieDetailViewModel {
     let id: Movie.ID
     
     @Published private(set) var movie: Movie?
-    
-    //    @Published var title = ""
-    //    @Published var tagline = ""
-    //    @Published var overview = ""
-    //    @Published var runtime = ""
-    //    @Published var image: UIImage?
-    
     @Published private(set) var castMembers: [CastMember] = []
     @Published private(set) var similarMovies: [Movie] = []
+    @Published private(set) var watchProviders: [WatchProvider] = []
     
     @Published var isLoading: Bool = false
     @Published var error: Error?
@@ -41,6 +35,7 @@ class MovieDetailViewModel {
         let movie: Movie
         let showCredits: ShowCredits
         let similarMovies: [Movie]
+        let watchProviders: ShowWatchProvider?
     }
     
     func fetchData() {
@@ -50,21 +45,18 @@ class MovieDetailViewModel {
                 async let movieData = fetcherService.fetchDetail(forMovie: id)
                 async let showCreditsData = fetcherService.fetchCastAndCrew(forMovie: id)
                 async let similarMoviesData = fetcherService.fetchSimilar(toMovie: id)
+                async let watchProvidersData = fetcherService.fetchShowWatchProvider(forMovie: id)
                 
                 
-                let movieDetail = try await MovieDetail(movie: movieData, showCredits: showCreditsData, similarMovies: similarMoviesData)
+                let movieDetail = try await MovieDetail(movie: movieData, showCredits: showCreditsData, similarMovies: similarMoviesData, watchProviders: watchProvidersData)
                 self.isLoading = false
                 self.movie = movieDetail.movie
-                //                guard let movie = self.movie else { return }
-                //                title = movie.title
-                //                tagline = movie.tagline ?? "No tagline"
-                //                overview = movie.overview ?? "No overview"
-                //                runtime = "\(movie.runtime ?? 0) minutes"
-                //                ImageLoader.shared.downloadImage(from: movie.backdropPath, as: .backdrop) { [weak self] image in
-                //                    self?.image = image
-                //                }
                 self.castMembers = movieDetail.showCredits.cast
                 self.similarMovies = movieDetail.similarMovies
+                
+                guard let watchProviders = movieDetail.watchProviders else { return }
+                self.watchProviders = watchProviders.free ?? watchProviders.buy ?? watchProviders.rent ?? watchProviders.flatRate ??  []
+                
             } catch {
                 self.isLoading = false
                 self.error = error
@@ -90,6 +82,16 @@ class MovieDetailViewModel {
         castMembersSnapshot.append(castMembers.map { MovieDetailRootView.Item.castMember($0) })
         dataSource.apply(castMembersSnapshot, to: .castMembers, animatingDifferences: false)
         
+        var similarMoviesSnapshot = NSDiffableDataSourceSectionSnapshot<MovieDetailRootView.Item>()
+        similarMoviesSnapshot.append(similarMovies.map { MovieDetailRootView.Item.similarMovie($0) })
+        dataSource.apply(similarMoviesSnapshot, to: .similarMovies, animatingDifferences: false)
+        
+        guard watchProviders.isEmpty else {
+            var watchProvidersSnapshot = NSDiffableDataSourceSectionSnapshot<MovieDetailRootView.Item>()
+            watchProvidersSnapshot.append(watchProviders.map { MovieDetailRootView.Item.watchProvider($0) })
+            dataSource.apply(watchProvidersSnapshot, to: .watchProviders, animatingDifferences: false)
+            return
+        }
         print("Applied to Data Source")
     }
     

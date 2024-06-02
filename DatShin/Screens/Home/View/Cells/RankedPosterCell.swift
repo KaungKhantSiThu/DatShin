@@ -9,8 +9,8 @@ import UIKit
 import NukeExtensions
 import Nuke
 
-class PosterCell: UICollectionViewCell, SelfConfiguringCell {
-    static var reuseIdentifier: String = String(describing: PosterCell.self)
+class RankedPosterCell: UICollectionViewCell, SelfConfiguringCell {
+    static var reuseIdentifier: String = String(describing: RankedPosterCell.self)
     
     
     

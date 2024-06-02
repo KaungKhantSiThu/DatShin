@@ -92,10 +92,10 @@ public struct Movie: Identifiable, Codable, Equatable, Hashable, Sendable {
     ///
     public let imdbID: String?
 
-//    ///
-//    /// Movie status.
-//    ///
-//    public let status: Status?
+    ///
+    /// Movie status.
+    ///
+    public let status: Status?
 //
 //    ///
 //    /// Movie production companies.
@@ -107,10 +107,10 @@ public struct Movie: Identifiable, Codable, Equatable, Hashable, Sendable {
 //    ///
 //    public let productionCountries: [ProductionCountry]?
 //
-//    ///
-//    /// Movie spoken languages.
-//    ///
-//    public let spokenLanguages: [SpokenLanguage]?
+    ///
+    /// Movie spoken languages.
+    ///
+    public let spokenLanguages: [SpokenLanguage]?
 
     ///
     /// Current popularity.
@@ -182,10 +182,10 @@ public struct Movie: Identifiable, Codable, Equatable, Hashable, Sendable {
         revenue: Double? = nil,
         homepageURL: URL? = nil,
         imdbID: String? = nil,
-//        status: Status? = nil,
+        status: Status? = nil,
 //        productionCompanies: [ProductionCompany]? = nil,
 //        productionCountries: [ProductionCountry]? = nil,
-//        spokenLanguages: [SpokenLanguage]? = nil,
+        spokenLanguages: [SpokenLanguage]? = nil,
         popularity: Double? = nil,
         voteAverage: Double? = nil,
         voteCount: Int? = nil,
@@ -207,10 +207,10 @@ public struct Movie: Identifiable, Codable, Equatable, Hashable, Sendable {
         self.revenue = revenue
         self.homepageURL = homepageURL
         self.imdbID = imdbID
-//        self.status = status
+        self.status = status
 //        self.productionCompanies = productionCompanies
 //        self.productionCountries = productionCountries
-//        self.spokenLanguages = spokenLanguages
+        self.spokenLanguages = spokenLanguages
         self.popularity = popularity
         self.voteAverage = voteAverage
         self.voteCount = voteCount
@@ -238,10 +238,10 @@ extension Movie {
         case revenue
         case homepageURL = "homepage"
         case imdbID = "imdbId"
-//        case status
+        case status
 //        case productionCompanies
 //        case productionCountries
-//        case spokenLanguages
+        case spokenLanguages
         case popularity
         case voteAverage
         case voteCount
@@ -288,10 +288,10 @@ extension Movie {
         }()
 
         self.imdbID = try container.decodeIfPresent(String.self, forKey: .imdbID)
-//        self.status = try container.decodeIfPresent(Status.self, forKey: .status)
+        self.status = try container.decodeIfPresent(Status.self, forKey: .status)
 //        self.productionCompanies = try container.decodeIfPresent([ProductionCompany].self, forKey: .productionCompanies)
 //        self.productionCountries = try container.decodeIfPresent([ProductionCountry].self, forKey: .productionCountries)
-//        self.spokenLanguages = try container.decodeIfPresent([SpokenLanguage].self, forKey: .spokenLanguages)
+        self.spokenLanguages = try container.decodeIfPresent([SpokenLanguage].self, forKey: .spokenLanguages)
         self.popularity = try container.decodeIfPresent(Double.self, forKey: .popularity)
         self.voteAverage = try container.decodeIfPresent(Double.self, forKey: .voteAverage)
         self.voteCount = try container.decodeIfPresent(Int.self, forKey: .voteCount)

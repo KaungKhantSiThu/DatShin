@@ -97,7 +97,8 @@ extension HomeViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
-        collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.reuseIdentifier)
+        collectionView.register(RankedPosterCell.self, forCellWithReuseIdentifier: RankedPosterCell.reuseIdentifier)
+        collectionView.register(CoverCell.self, forCellWithReuseIdentifier: CoverCell.reuseIdentifier)
         collectionView.register(FeaturedViewCell.self, forCellWithReuseIdentifier: FeaturedViewCell.reuseIdentifier)
 
     }
@@ -121,14 +122,12 @@ extension HomeViewController {
             switch section.id {
             case .nowPlaying:
                 return self.configure(FeaturedViewCell.self, with: movie, for: indexPath)
-//            case .popular:
-//                <#code#>
-//            case .topRated:
-//                <#code#>
-//            case .upcoming:
-//                <#code#>
-            default:
-                return self.configure(PosterCell.self, with: movie, for: indexPath)
+            case .popular:
+                return self.configure(CoverCell.self, with: movie, for: indexPath)
+            case .topRated:
+                return self.configure(RankedPosterCell.self, with: movie, for: indexPath)
+            case .upcoming:
+                return self.configure(CoverCell.self, with: movie, for: indexPath)
             }
         }
         
@@ -152,20 +151,18 @@ extension HomeViewController {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
             
             
-            guard let identifier = Identifier(rawValue: sectionIndex)  else { return nil }
+            guard let identifier = Identifier(rawValue: sectionIndex)  else { fatalError("Section doesn't exist") }
             let section = self.sectionsStore.fetchByID(identifier)
             switch section.id {
             case .nowPlaying:
-                return self.createFeaturedSection(using: sectionIndex)
-                
-                //            case .popular:
-                //                <#code#>
-                //            case .topRated:
-                //                <#code#>
-                //            case .upcoming:
-                //                <#code#>
-            default:
-                return self.createHorizontalSection(using: section)
+                return self.createFeaturedSection()
+            case .popular:
+                return self.createPosterSection()
+            case .topRated:
+                return self.createRankSection()
+            case .upcoming:
+                return self.createPosterSection()
+
             }
         }
         
@@ -175,7 +172,7 @@ extension HomeViewController {
         return layout
     }
     
-    func createFeaturedSection(using sectionIndex: Int) -> NSCollectionLayoutSection {
+    func createFeaturedSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -191,7 +188,7 @@ extension HomeViewController {
         return layoutSection
     }
     
-    func createHorizontalSection(using section: Section) -> NSCollectionLayoutSection {
+    func createRankSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         
@@ -206,6 +203,22 @@ extension HomeViewController {
         let layoutSectionHeader = createSectionHeader()
         layoutSection.boundarySupplementaryItems = [layoutSectionHeader]
         return layoutSection
+    }
+    
+    func createPosterSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25), heightDimension: .fractionalWidth(0.25 * 1.5))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 10
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        
+        section.boundarySupplementaryItems = [self.createSectionHeader()]
+        return section
     }
     
     func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
