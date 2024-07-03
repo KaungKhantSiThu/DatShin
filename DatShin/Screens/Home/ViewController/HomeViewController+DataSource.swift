@@ -9,21 +9,22 @@ import UIKit
 
 extension HomeViewController {
     // MARK: - Value Types
-    typealias DataSource = UICollectionViewDiffableDataSource<Section.ID, Movie.ID>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section.ID, Movie.ID>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section.ID, MovieWrapper>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section.ID, MovieWrapper>
     
-    func setPostNeedsUpdate(_ id: Movie.ID) {
+    func setMovieNeedsUpdate(_ movie: MovieWrapper) {
         var snapshot = self.dataSource.snapshot()
-        snapshot.reconfigureItems([id])
+        snapshot.reconfigureItems([movie])
         self.dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     func setInitialData() {
         var snapshot = Snapshot()
         snapshot.appendSections(Section.ID.allCases)
-        for sectionType in Section.ID.allCases {
-            let movies = self.sectionsStore.fetchByID(sectionType).movies
-            snapshot.appendItems(movies, toSection: sectionType)
+        for sectionID in Section.ID.allCases {
+            let movies = self.sectionsStore.fetchByID(sectionID).movies
+            let movieWrapper = movies.map { MovieWrapper(movieID: $0, sectionID: sectionID)}
+            snapshot.appendItems(movieWrapper, toSection: sectionID)
         }
         
         self.dataSource.apply(snapshot, animatingDifferences: true)

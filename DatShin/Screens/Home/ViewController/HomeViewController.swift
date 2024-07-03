@@ -117,11 +117,11 @@ extension HomeViewController {
     
     func createDataSource() {
         
-        dataSource = DataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, movieID) in
+        dataSource = DataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, movieWrapper) in
             guard let self = self else { return nil }
             guard let identifier = Identifier(rawValue: indexPath.section)  else { return nil}
             let section = self.sectionsStore.fetchByID(identifier)
-            let movie = self.moviesStore.fetchByID(movieID)
+            let movie = self.moviesStore.fetchByID(movieWrapper.movieID)
             switch section.id {
             case .nowPlaying:
                 return self.configure(NowPlayingCell.self, with: movie, for: indexPath)

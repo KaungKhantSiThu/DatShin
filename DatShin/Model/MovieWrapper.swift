@@ -8,6 +8,7 @@
 import Foundation
 
 struct MovieWrapper: Hashable {
+//    let id = UUID()
     let movieID: Movie.ID
     let sectionID: Section.ID
     

@@ -9,8 +9,8 @@ import UIKit
 
 extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let movieID = dataSource.itemIdentifier(for: indexPath) else { return }
-        let detailVC = MovieDetailViewController(viewModel: .init(id: movieID, fetcherService: fetcher))
+        guard let movieWrapper = dataSource.itemIdentifier(for: indexPath) else { return }
+        let detailVC = MovieDetailViewController(viewModel: .init(id: movieWrapper.movieID, fetcherService: fetcher))
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
