@@ -67,7 +67,7 @@ class MovieDetailRootView: NiblessView {
     private func constructHierarchy() {
         let layout = createLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        //        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(collectionView)
@@ -78,12 +78,14 @@ class MovieDetailRootView: NiblessView {
             collectionView.topAnchor.constraint(equalTo: topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
-
+        
         collectionView.register(MovieHeaderCell.self, forCellWithReuseIdentifier: MovieHeaderCell.reuseIdentifier)
+        collectionView.register(GenreCell.self, forCellWithReuseIdentifier: GenreCell.reuseIdentifier)
         collectionView.register(PersonCell.self, forCellWithReuseIdentifier: PersonCell.reuseIdentifier)
         collectionView.register(CoverCell.self, forCellWithReuseIdentifier: CoverCell.reuseIdentifier)
         collectionView.register(StreamingCell.self, forCellWithReuseIdentifier: StreamingCell.reuseIdentifier)
         collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeaderView.reuseIdentifier)
+        
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -93,7 +95,7 @@ class MovieDetailRootView: NiblessView {
             case .header:
                 return self.createHeaderSection()
             case .castMembers:
-                return self.createListSection()
+                return self.createCastMemberSection()
             case .similarMovies:
                 return self.createSimilarSection()
             case .watchProviders:
@@ -110,11 +112,12 @@ class MovieDetailRootView: NiblessView {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
         return section
     }
     
-    private func createListSection() -> NSCollectionLayoutSection {
+    private func createCastMemberSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
@@ -151,12 +154,12 @@ class MovieDetailRootView: NiblessView {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.93), heightDimension: .fractionalWidth(0.55))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .fractionalWidth(0.55))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
-
+        
         section.interGroupSpacing = 10
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
         
@@ -201,15 +204,15 @@ class MovieDetailRootView: NiblessView {
     }
     
     private func bindViewModel() {
-            viewModel.$movie
+        viewModel.$movie
             .combineLatest(viewModel.$castMembers, viewModel.$similarMovies, viewModel.$watchProviders)
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] (_, _, _, _) in
-                    guard let self = self else { return }
-                    self.applySnapshot()
-                }
-                .store(in: &subscriptions)
-        }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] (_, _, _, _) in
+                guard let self = self else { return }
+                self.applySnapshot()
+            }
+            .store(in: &subscriptions)
+    }
     
     func applySnapshot() {
         viewModel.applySnapshot(to: dataSource)

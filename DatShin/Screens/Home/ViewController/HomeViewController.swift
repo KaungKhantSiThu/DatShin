@@ -24,6 +24,10 @@ class HomeViewController: DSDataLoadingViewController {
     
     var loadingTask: Task<Void, Never>?
     
+    private var cancellables = Set<AnyCancellable>()
+    
+    private let pagingInfoSubject = PassthroughSubject<PagingInfo, Never>()
+    
     init(fetcherService: MoviesFetcherService) {
         self.fetcher = fetcherService
         super.init(nibName: nil, bundle: nil)
@@ -86,7 +90,6 @@ extension HomeViewController {
         
         // To ignore Safe Area Layout
         collectionView.contentInsetAdjustmentBehavior = .never
-
         
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +102,7 @@ extension HomeViewController {
         
         collectionView.register(RankedPosterCell.self, forCellWithReuseIdentifier: RankedPosterCell.reuseIdentifier)
         collectionView.register(CoverCell.self, forCellWithReuseIdentifier: CoverCell.reuseIdentifier)
-        collectionView.register(FeaturedViewCell.self, forCellWithReuseIdentifier: FeaturedViewCell.reuseIdentifier)
+        collectionView.register(NowPlayingCell.self, forCellWithReuseIdentifier: NowPlayingCell.reuseIdentifier)
 
     }
     
@@ -121,7 +124,7 @@ extension HomeViewController {
             let movie = self.moviesStore.fetchByID(movieID)
             switch section.id {
             case .nowPlaying:
-                return self.configure(FeaturedViewCell.self, with: movie, for: indexPath)
+                return self.configure(NowPlayingCell.self, with: movie, for: indexPath)
             case .popular:
                 return self.configure(CoverCell.self, with: movie, for: indexPath)
             case .topRated:
@@ -132,7 +135,7 @@ extension HomeViewController {
         }
         
         // Header
-        let supplementaryRegistration = UICollectionView.SupplementaryRegistration<MoviesRowHeaderSupplementaryView>(elementKind: MoviesRowHeaderSupplementaryView.reuseIdentifier) { [weak self] (supplementaryView, string, indexPath) in
+        let headerRegistration = UICollectionView.SupplementaryRegistration<MoviesRowHeaderSupplementaryView>(elementKind: MoviesRowHeaderSupplementaryView.reuseIdentifier) { [weak self]  (supplementaryView, string, indexPath) in
             
             guard let self = self else { return }
             
@@ -140,9 +143,25 @@ extension HomeViewController {
             supplementaryView.titleLabel.text = sectionID.description
         }
         
+        let footerRegistration = UICollectionView.SupplementaryRegistration<PagingSectionFooterView>(elementKind: PagingSectionFooterView.reuseIdentifier) { [weak self] (pagingFooter, elementKind, indexPath) in
+            
+            guard let self = self else { return }
+            
+            let sectionID = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
+            let itemCount = self.dataSource.snapshot().numberOfItems(inSection: sectionID)
+            pagingFooter.configure(with: itemCount)
+            
+            pagingFooter.subscribeTo(subject: pagingInfoSubject, for: indexPath.section)
+        }
+        
         dataSource.supplementaryViewProvider = { (view, kind, index) in
-            return self.collectionView.dequeueConfiguredReusableSupplementary(
-                using: supplementaryRegistration, for: index)
+            if kind == MoviesRowHeaderSupplementaryView.reuseIdentifier {
+                return self.collectionView.dequeueConfiguredReusableSupplementary(
+                    using: headerRegistration, for: index)
+            } else {
+                return self.collectionView.dequeueConfiguredReusableSupplementary(
+                    using: footerRegistration, for: index)
+            }
         }
 
     }
@@ -150,12 +169,11 @@ extension HomeViewController {
     func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
             
-            
             guard let identifier = Identifier(rawValue: sectionIndex)  else { fatalError("Section doesn't exist") }
             let section = self.sectionsStore.fetchByID(identifier)
             switch section.id {
             case .nowPlaying:
-                return self.createFeaturedSection()
+                return self.createNowPlayingSection()
             case .popular:
                 return self.createPosterSection()
             case .topRated:
@@ -172,7 +190,7 @@ extension HomeViewController {
         return layout
     }
     
-    func createFeaturedSection() -> NSCollectionLayoutSection {
+    func createNowPlayingSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         
         let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -184,6 +202,19 @@ extension HomeViewController {
         layoutSection.orthogonalScrollingBehavior = .groupPagingCentered
         layoutSection.interGroupSpacing = 10
         layoutSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        
+        let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
+        let pagingFooterElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: PagingSectionFooterView.reuseIdentifier, alignment: .bottom)
+        pagingFooterElement.contentInsets = NSDirectionalEdgeInsets(top: -70, leading: 0, bottom: 0, trailing: 0)
+        layoutSection.boundarySupplementaryItems = [pagingFooterElement]
+
+        layoutSection.visibleItemsInvalidationHandler = { [weak self] (items, offset, env) -> Void in
+            guard let self = self else { return }
+
+            let page = round(offset.x / self.view.bounds.width)
+
+            self.pagingInfoSubject.send(PagingInfo(sectionIndex: 0, currentPage: Int(page)))
+        }
         
         return layoutSection
     }

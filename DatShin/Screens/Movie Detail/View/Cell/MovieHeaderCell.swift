@@ -118,9 +118,9 @@ class MovieHeaderCell: UICollectionViewCell {
         }
         
         titleLabel.text = movie.title
-        genreLabel.text = movie.genres?.first?.name ?? "No genres"
+        genreLabel.text = movie.genres?.prefix(3).map(\.name).joined(separator: ", ") ?? "No genres"
         releasedDateLabel.text = movie.releaseDate?.formatted(.dateTime.day().month().year()) ?? "No Date"
-        runtimeLabel.text = "\(movie.runtime ?? 0) m"
+        runtimeLabel.text = movie.runtime?.convertMinutesToDurationString() ?? "No runtime"
         descriptionLabel.text = movie.overview ?? "No Overview"
     }
 }

@@ -7,9 +7,9 @@
 
 import UIKit
 
-class FeaturedViewCell: UICollectionViewCell, SelfConfiguringCell {
+class NowPlayingCell: UICollectionViewCell, SelfConfiguringCell {
     
-    static var reuseIdentifier: String = String(describing: FeaturedViewCell.self)
+    static var reuseIdentifier: String = String(describing: NowPlayingCell.self)
     
     
     private let imageView = UIImageView()
@@ -84,7 +84,7 @@ class FeaturedViewCell: UICollectionViewCell, SelfConfiguringCell {
             
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30)
         ])
     }
     

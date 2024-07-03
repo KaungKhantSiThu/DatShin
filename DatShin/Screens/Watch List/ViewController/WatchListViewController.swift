@@ -58,7 +58,7 @@ class WatchListViewController: DSDataLoadingViewController {
 extension WatchListViewController {
     func configureViewController() {
         view.backgroundColor = .systemBackground
-        title = "Favorites"
+        title = "Watchlist"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     

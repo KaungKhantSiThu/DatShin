@@ -57,7 +57,7 @@
 //        ])
 //        
 //        collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.reuseIdentifier)
-//        collectionView.register(FeaturedViewCell.self, forCellWithReuseIdentifier: FeaturedViewCell.reuseIdentifier)
+//        collectionView.register(NowPlayingCell.self, forCellWithReuseIdentifier: FeaturedViewCell.reuseIdentifier)
 //
 //    }
 //    
@@ -113,7 +113,7 @@
 //            let section = self.viewModel.sectionsStore.fetchByID(identifier)
 //            switch section.id {
 //            case .nowPlaying:
-//                return self.createFeaturedSection(using: sectionIndex)
+//                return self.createNowPlayingSection(using: sectionIndex)
 //                
 //                //            case .popular:
 //                //                <#code#>

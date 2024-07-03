@@ -19,7 +19,7 @@ class MovieDetailViewModel {
     @Published private(set) var castMembers: [CastMember] = []
     @Published private(set) var similarMovies: [Movie] = []
     @Published private(set) var watchProviders: [WatchProvider] = []
-    
+
     @Published var isLoading: Bool = false
     @Published var error: Error?
     
