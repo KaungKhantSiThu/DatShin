@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,9 @@
 		70093DDF2BF726CF0048D12D /* NowPlayingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70093DDE2BF726CF0048D12D /* NowPlayingCell.swift */; };
 		70093DE12BF729890048D12D /* FeaturedPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70093DE02BF729890048D12D /* FeaturedPropertiesView.swift */; };
 		70093DE32BF7377A0048D12D /* SelfConfiguringCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70093DE22BF7377A0048D12D /* SelfConfiguringCell.swift */; };
+		70311D242DEEB89100908776 /* DependencyContainerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70311D232DEEB89100908776 /* DependencyContainerProtocol.swift */; };
+		70311D262DEEB8AC00908776 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70311D252DEEB8AC00908776 /* DependencyContainer.swift */; };
+		70311D282DEEB8C300908776 /* ServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70311D272DEEB8C300908776 /* ServiceFactory.swift */; };
 		7046D3AD2C3568DE005EFE9C /* MovieWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7046D3AC2C3568DE005EFE9C /* MovieWrapper.swift */; };
 		7076CE932C00903900478B53 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7076CE922C00903900478B53 /* TagView.swift */; };
 		7076CE952C00936A00478B53 /* TagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7076CE942C00936A00478B53 /* TagListView.swift */; };
@@ -132,6 +135,9 @@
 		70093DDE2BF726CF0048D12D /* NowPlayingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingCell.swift; sourceTree = "<group>"; };
 		70093DE02BF729890048D12D /* FeaturedPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedPropertiesView.swift; sourceTree = "<group>"; };
 		70093DE22BF7377A0048D12D /* SelfConfiguringCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfConfiguringCell.swift; sourceTree = "<group>"; };
+		70311D232DEEB89100908776 /* DependencyContainerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainerProtocol.swift; sourceTree = "<group>"; };
+		70311D252DEEB8AC00908776 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
+		70311D272DEEB8C300908776 /* ServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceFactory.swift; sourceTree = "<group>"; };
 		7046D3AC2C3568DE005EFE9C /* MovieWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieWrapper.swift; sourceTree = "<group>"; };
 		7076CE922C00903900478B53 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		7076CE942C00936A00478B53 /* TagListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListView.swift; sourceTree = "<group>"; };
@@ -525,6 +531,9 @@
 		708D13D32BEC8ECF004F7811 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				70311D272DEEB8C300908776 /* ServiceFactory.swift */,
+				70311D252DEEB8AC00908776 /* DependencyContainer.swift */,
+				70311D232DEEB89100908776 /* DependencyContainerProtocol.swift */,
 				708D13D42BEC8EDC004F7811 /* Constants.swift */,
 				708D14452BF398CE004F7811 /* DSError.swift */,
 				70093DD32BF4B1DE0048D12D /* UICollectionView+Extensions.swift */,
@@ -749,6 +758,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70311D242DEEB89100908776 /* DependencyContainerProtocol.swift in Sources */,
 				708D139D2BEC8879004F7811 /* MoviesFetcherServiceMock.swift in Sources */,
 				708D13FE2BECDE5F004F7811 /* DSButton.swift in Sources */,
 				708D13C02BEC8AAB004F7811 /* PageableListResult.swift in Sources */,
@@ -780,6 +790,7 @@
 				7076CEC12C03574300478B53 /* CrewMember.swift in Sources */,
 				708D13D52BEC8EDC004F7811 /* Constants.swift in Sources */,
 				70093DDF2BF726CF0048D12D /* NowPlayingCell.swift in Sources */,
+				70311D282DEEB8C300908776 /* ServiceFactory.swift in Sources */,
 				70F4D5422BFB2F5900140077 /* SearchFetcher.swift in Sources */,
 				708D14442BF39812004F7811 /* PersistenceManager.swift in Sources */,
 				708D13B52BEC8A17004F7811 /* URL+QueryItem.swift in Sources */,
@@ -818,6 +829,7 @@
 				708D13A32BEC89C3004F7811 /* Endpoint.swift in Sources */,
 				7076CEC72C0485D900478B53 /* PersonCell.swift in Sources */,
 				708D13B62BEC8A17004F7811 /* URL+TMDb.swift in Sources */,
+				70311D262DEEB8AC00908776 /* DependencyContainer.swift in Sources */,
 				70F4D54D2BFE1AB600140077 /* CoreDataStack.swift in Sources */,
 				7076CF022C0613C800478B53 /* CoverCell.swift in Sources */,
 				70F4D5692BFF81D500140077 /* SearchViewController+UISearchBarDelegate.swift in Sources */,

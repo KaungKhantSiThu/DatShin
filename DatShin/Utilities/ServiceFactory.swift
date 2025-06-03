@@ -1,26 +1,40 @@
-final class ServiceFactory: ServiceFactoryProtocol {
+//
+//  ServiceFactory.swift
+//  DatShin
+//
+//  Created by Kaung Khant Si Thu on 3/6/25.
+//
+
+import Foundation
+import CoreData
+
+protocol ServiceFactoryProtocol {
+    func makeMoviesFetcherService() -> MoviesFetcher
+    func makeSearchService() -> SearchFetcher
+    func makeCoreDataService() -> CoreDataServiceProtocol
+}
+
+protocol CoreDataServiceProtocol {
+    var managedContext: NSManagedObjectContext { get }
+    func saveContext()
+}
+
+class ServiceFactory: ServiceFactoryProtocol {
     private let container: DependencyContainerProtocol
     
     init(container: DependencyContainerProtocol) {
         self.container = container
     }
     
-    func makeRequestManager() -> RequestManagerProtocol {
-        return RequestManager(
-            apiManager: container.resolve(),
-            parser: container.resolve()
-        )
+    func makeMoviesFetcherService() -> MoviesFetcher {
+        return container.resolve() as MoviesFetcher
     }
     
-    func makeMoviesFetcherService() -> MoviesFetcherServiceProtocol {
-        return MoviesFetcherService(
-            requestManager: makeRequestManager()
-        )
+    func makeSearchService() -> SearchFetcher {
+        return container.resolve() as SearchFetcher
     }
     
-    func makeSearchService() -> SearchServiceProtocol {
-        return SearchService(
-            requestManager: makeRequestManager()
-        )
+    func makeCoreDataService() -> CoreDataServiceProtocol {
+        return container.resolve() as CoreDataServiceProtocol
     }
 }

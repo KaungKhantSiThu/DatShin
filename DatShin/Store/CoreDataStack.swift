@@ -8,17 +8,22 @@
 import Foundation
 import CoreData
 
-class CoreDataStack {
+class CoreDataStack: CoreDataServiceProtocol {
     private let modelName: String
+    private(set) var spotlightIndexer: MoviesSpotlightDelegate?
     
-    private (set) var spotlightIndexer: MoviesSpotlightDelegate?
-    
-    lazy var managedContext: NSManagedObjectContext = {
-        return self.storeContainer.viewContext
-    }()
+    var managedContext: NSManagedObjectContext {
+        return storeContainer.viewContext
+    }
     
     init(modelName: String) {
         self.modelName = modelName
+        setupSpotlightIndexer()
+    }
+    
+    private func setupSpotlightIndexer() {
+        guard let description = storeContainer.persistentStoreDescriptions.first else { return }
+        spotlightIndexer = MoviesSpotlightDelegate(forStoreWith: description, coordinator: storeContainer.persistentStoreCoordinator)
     }
     
     private lazy var storeContainer: NSPersistentContainer = {
@@ -39,8 +44,6 @@ class CoreDataStack {
                 print("Unresolved error \(error), \(error.userInfo)")
             }
         }
-        
-        spotlightIndexer = MoviesSpotlightDelegate(forStoreWith: description, coordinator: container.persistentStoreCoordinator)
         
         return container
     }()

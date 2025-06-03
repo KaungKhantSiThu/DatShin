@@ -1,4 +1,12 @@
-// DependencyContainer.swift
+//
+//  DependencyContainer.swift
+//  DatShin
+//
+//  Created by Kaung Khant Si Thu on 3/6/25.
+//
+
+import Foundation
+
 final class DependencyContainer: DependencyContainerProtocol {
     private var factories: [String: () -> Any] = [:]
     

@@ -10,6 +10,21 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    
+    lazy var dependencyContainer: DependencyContainerProtocol = {
+            let container = DependencyContainer()
+            
+            // Register core components
+            container.register { APIManager() as APIManagerProtocol }
+            container.register { DataParser() as DataParserProtocol }
+            container.register { LocaleProvider(locale: .current) as LocaleProviding }
+            
+            // Register the service factory itself
+            container.register { ServiceFactory(container: container) as ServiceFactoryProtocol }
+            
+            return container
+        }()
+    
     lazy var coreDataStack: CoreDataStack = {
         return CoreDataStack(modelName: "DatShin")
     }()
@@ -17,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        // Register core data stack
+        dependencyContainer.register { [unowned self] in self.coreDataStack }
         return true
     }
 

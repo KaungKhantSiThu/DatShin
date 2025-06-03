@@ -8,38 +8,30 @@
 import UIKit
 
 class TabBarController: UITabBarController {
-    
-    let fetcherService = MoviesFetcherService(requestManager: RequestManager())
-    let searchService = SearchService(requestManager: RequestManager())
 
+    
+    private let serviceFactory: ServiceFactoryProtocol
+    private lazy var viewControllerFactory: ViewControllerFactoryProtocol = {
+        return ViewControllerFactory(serviceFactory: serviceFactory)
+    }()
+    
+    init(serviceFactory: ServiceFactoryProtocol) {
+        self.serviceFactory = serviceFactory
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         UITabBar.appearance().tintColor = .systemGreen
-        viewControllers = [createMoviesNC(), createFavoritesNC(), createSearchNC()]
-    }
-    
-    func createMoviesNC() -> UINavigationController {
-        let moviesVC = HomeViewController(fetcherService: fetcherService)
-        moviesVC.title = "Home"
-        moviesVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
-        let nc = UINavigationController(rootViewController: moviesVC)
-        return nc
-    }
-    
-    func createFavoritesNC() -> UINavigationController {
-        let favoritesVC = WatchListViewController(fetcherService: fetcherService)
-        favoritesVC.title = "Watchlist"
-        favoritesVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
-        let nc = UINavigationController(rootViewController: favoritesVC)
-        return nc
-    }
-    
-    func createSearchNC() -> UINavigationController {
-        let searchVC = SearchViewController(service: searchService)
-        searchVC.title = "Search"
-        searchVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 2)
-        let nc = UINavigationController(rootViewController: searchVC)
-        return nc
+        viewControllers = [
+            viewControllerFactory.makeHomeViewController(),
+            viewControllerFactory.makeWatchListViewController(),
+            viewControllerFactory.makeSearchViewController()
+        ]
     }
     
 }

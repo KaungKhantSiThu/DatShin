@@ -25,12 +25,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let windowScene = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene),
+              let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
-        window?.rootViewController = TabBarController()
+        // Get the service factory from the container
+        let serviceFactory = appDelegate.dependencyContainer.resolve() as ServiceFactoryProtocol
+        let viewControllerFactory = ViewControllerFactory(serviceFactory: serviceFactory)
+        
+        // Create the root view controller using the factory
+        window?.rootViewController = viewControllerFactory.makeTabBarController()
         window?.makeKeyAndVisible()
     }
 
