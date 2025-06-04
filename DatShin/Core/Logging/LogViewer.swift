@@ -8,7 +8,7 @@
 import UIKit
 
 /// A view controller for viewing and sharing logs
-final class LogViewerViewController: BaseViewController {
+final class LogViewerViewController: UIViewController {
     // MARK: - Properties
     
     private let textView = UITextView()

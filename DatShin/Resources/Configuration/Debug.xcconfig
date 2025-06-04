@@ -1,0 +1,12 @@
+// Debug.xcconfig
+
+// App Settings
+APP_NAME = DatShin Debug
+BUNDLE_IDENTIFIER = com.example.DatShin.debug
+
+// API Configuration
+API_BASE_URL = https:/$()/api.debug.example.com
+API_KEY = DEBUG_API_KEY
+
+// Other settings
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG

@@ -1,0 +1,12 @@
+// Staging.xcconfig
+
+// App Settings
+APP_NAME = DatShin Staging
+BUNDLE_IDENTIFIER = com.example.DatShin.staging
+
+// API Configuration
+API_BASE_URL = https:/$()/api.staging.example.com
+API_KEY = STAGING_API_KEY
+
+// Other settings
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = STAGING

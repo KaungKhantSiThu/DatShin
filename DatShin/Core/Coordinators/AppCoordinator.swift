@@ -33,8 +33,10 @@ final class AppCoordinator: BaseCoordinator {
     override func start() {
         setupTabBarController()
         window.rootViewController = tabBarController
+        // SceneDelegate now handles making the window key and visible.
         window.makeKeyAndVisible()
         setupTabCoordinators()
+        print(#function)
     }
     
     private func setupTabBarController() {
