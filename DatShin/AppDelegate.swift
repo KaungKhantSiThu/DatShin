@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import os.log
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
+    /// Reference to the app coordinator
+    var appCoordinator: AppCoordinator?
+    
     lazy var coreDataStack: CoreDataStack = {
         return CoreDataStack(modelName: "DatShin")
     }()
@@ -17,7 +21,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Initialize logging system
+        setupLogging()
+        
         return true
+    }
+    
+    // MARK: - Logging Setup
+    
+    private func setupLogging() {
+        // Initialize the logger factory to ensure loggers are created
+        _ = LoggerFactory.shared
+        
+        // Log app launch
+        Log.default.info("Application launched: \(Bundle.main.bundleIdentifier ?? "unknown") v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown")")
+        
+        // Add test logs with higher levels that will appear in console
+        Log.default.error("TEST ERROR LOG - This should appear in the console")
+        Log.default.critical("TEST CRITICAL LOG - This should definitely appear in the console")
+        
+        // Setup view controller lifecycle logging via method swizzling
+//        UIViewController.swizzleViewControllerLifecycleMethods()
     }
 
     // MARK: UISceneSession Lifecycle

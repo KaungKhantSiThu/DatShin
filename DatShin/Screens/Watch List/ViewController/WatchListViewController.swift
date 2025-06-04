@@ -16,7 +16,7 @@ class WatchListViewController: DSDataLoadingViewController {
     
     var favorites: [WLMovie] = []
     
-    let fetcherService: MoviesFetcherService
+    let fetcherService: MovieServiceProtocol
     
     lazy var coreDataStack = CoreDataStack(modelName: "DatShin")
     
@@ -27,7 +27,7 @@ class WatchListViewController: DSDataLoadingViewController {
     }()
 
     
-    init(fetcherService: MoviesFetcherService) {
+    init(fetcherService: MovieServiceProtocol) {
         self.fetcherService = fetcherService
         super.init(nibName: nil, bundle: nil)
     }

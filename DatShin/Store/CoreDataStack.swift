@@ -11,7 +11,7 @@ import CoreData
 class CoreDataStack {
     private let modelName: String
     
-    private (set) var spotlightIndexer: MoviesSpotlightDelegate?
+    private(set) var spotlightIndexer: MoviesSpotlightDelegate?
     
     lazy var managedContext: NSManagedObjectContext = {
         return self.storeContainer.viewContext

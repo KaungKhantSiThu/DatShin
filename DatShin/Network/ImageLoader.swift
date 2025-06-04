@@ -1,9 +1,10 @@
 //
-//  TMDbImageLoader.swift
-//  Yote Shin
+//  ImageLoader.swift
+//  DatShin
 //
-//  Created by Kaung Khant Si Thu on 16/04/2024.
+//  Created by Kaung Khant Si Thu on 4/6/25.
 //
+
 
 import UIKit
 

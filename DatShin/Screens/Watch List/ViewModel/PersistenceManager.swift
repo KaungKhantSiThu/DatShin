@@ -54,35 +54,35 @@ enum PersistenceManager {
     
     static func retrieveFavorites(completed: @escaping (Result<[FavoriteMovie], DSError>) -> Void) {
         guard let favoriteData = defaults.object(forKey: Keys.movies) as? Data else {
-            logger.log("Failed to retrieve favorites data from UserDefaults")
+            //logger.log("Failed to retrieve favorites data from UserDefaults")
             completed(.success([]))
             return
         }
-        logger.log("Retrieved movies data from UserDefaults")
+        //logger.log("Retrieved movies data from UserDefaults")
         do {
-            logger.log("Decoding movies data to Movie Array")
+            //logger.log("Decoding movies data to Movie Array")
             
             let decoder = JSONDecoder()            
             let favorites = try decoder.decode([FavoriteMovie].self, from: favoriteData)
-            logger.log("Successfully Decoded Movie Array of count \(favorites.count) from movies data")
+            //logger.log("Successfully Decoded Movie Array of count \(favorites.count) from movies data")
             completed(.success(favorites))
         } catch {
-            logger.log("Failed to decode movies data. \(error.localizedDescription)")
+            //logger.log("Failed to decode movies data. \(error.localizedDescription)")
             completed(.failure(.unableToRetrieve))
         }
     }
     
     static func save(favorites: [FavoriteMovie]) -> DSError? {
-        logger.log("Saving Movie Array to UserDefaults")
+        //logger.log("Saving Movie Array to UserDefaults")
         do {
-            logger.log("Encoding movies data to Movie Array")
+            //logger.log("Encoding movies data to Movie Array")
             let encoder = JSONEncoder()
             let encodedFavorites = try encoder.encode(favorites)
             defaults.set(encodedFavorites, forKey: Keys.movies)
-            logger.log("Successfully encoded Movie Array to data")
+            //logger.log("Successfully encoded Movie Array to data")
             return nil
         } catch {
-            logger.log("Failed to encode Movie Array to data")
+            //logger.log("Failed to encode Movie Array to data")
             return .unableToBookmark
         }
     }

@@ -49,6 +49,13 @@ class CoverCell: UICollectionViewCell, SelfConfiguringCell {
         NukeExtensions.loadImage(with: request, options: options, into: imageView)
     }
     
+    func configure(with movie: MovieListItem) {
+        let imageURL = ImageLoader.shared.generateFullURL(from: movie.posterPath, as: .backdrop, idealWidth: 60)
+        let request = self.makeRequest(with: imageURL, cellSize: bounds.size)
+        let options = self.makeImageLoadingOptions()
+        NukeExtensions.loadImage(with: request, options: options, into: imageView)
+    }
+    
     func makeRequest(with url: URL, cellSize: CGSize) -> ImageRequest {
         ImageRequest(url: url)
     }

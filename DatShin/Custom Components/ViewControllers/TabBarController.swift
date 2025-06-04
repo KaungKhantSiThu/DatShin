@@ -9,37 +9,45 @@ import UIKit
 
 class TabBarController: UITabBarController {
     
-    let fetcherService = MoviesFetcherService(requestManager: RequestManager())
-    let searchService = SearchService(requestManager: RequestManager())
-
+    // MARK: - Properties
+    
+    private let viewControllerFactory: ViewControllerFactoryProtocol
+    
+    // MARK: - Initialization
+    
+    init(viewControllerFactory: ViewControllerFactoryProtocol) {
+        self.viewControllerFactory = viewControllerFactory
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureTabBar()
+        setupViewControllers()
+    }
+    
+    // MARK: - Configuration
+    
+    private func configureTabBar() {
         UITabBar.appearance().tintColor = .systemGreen
-        viewControllers = [createMoviesNC(), createFavoritesNC(), createSearchNC()]
     }
     
-    func createMoviesNC() -> UINavigationController {
-        let moviesVC = HomeViewController(fetcherService: fetcherService)
-        moviesVC.title = "Home"
-        moviesVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
-        let nc = UINavigationController(rootViewController: moviesVC)
-        return nc
+    private func setupViewControllers() {
+        // Create empty navigation controllers that will be populated by coordinators
+        let watchlistNC = UINavigationController()
+        watchlistNC.tabBarItem = UITabBarItem(title: "Watchlist", image: UIImage(systemName: "bookmark.fill"), tag: 0) // Using .bookmarks system item implies a title, let's be explicit or use a custom image
+        // Let's ensure 'Watchlist' title is shown, as .bookmarks might not show it by default.
+        // Or, if we want system item behavior: watchlistNC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 0)
+        
+        let discoverNC = UINavigationController() // Renamed from searchNC for clarity of its new role
+        discoverNC.tabBarItem = UITabBarItem(title: "Discover", image: UIImage(systemName: "magnifyingglass"), tag: 1) // Using magnifying glass for 'Discover & Search'
+        
+        viewControllers = [watchlistNC, discoverNC]
     }
-    
-    func createFavoritesNC() -> UINavigationController {
-        let favoritesVC = WatchListViewController(fetcherService: fetcherService)
-        favoritesVC.title = "Watchlist"
-        favoritesVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
-        let nc = UINavigationController(rootViewController: favoritesVC)
-        return nc
-    }
-    
-    func createSearchNC() -> UINavigationController {
-        let searchVC = SearchViewController(service: searchService)
-        searchVC.title = "Search"
-        searchVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 2)
-        let nc = UINavigationController(rootViewController: searchVC)
-        return nc
-    }
-    
 }

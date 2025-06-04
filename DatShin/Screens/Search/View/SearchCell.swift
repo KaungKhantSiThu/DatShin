@@ -9,73 +9,84 @@ import UIKit
 import NukeExtensions
 import Nuke
 
-class SearchCell: UITableViewCell, SelfConfiguringCell {
-    static var reuseIdentifier: String { String(describing: Self.self) }
+class SearchCell: UITableViewCell {
+
+    static let reuseIdentifier = "SearchCell"
     
-    let posterImageView = UIImageView(frame: .zero)
+    // MARK: - UI Components
+    let movieImageView = UIImageView()
     let titleLabel = UILabel()
-    private let ratingLabel = UILabel()
+    let overviewLabel = UILabel()
+    let genreIconView = UIImageView()
+    
+    // MARK: - Properties
+    private var imageTask: Task<Void, Never>?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configure()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageTask?.cancel()
+        movieImageView.image = nil
+        genreIconView.isHidden = true
+    }
+    
+    func configure() {
+        // Add subviews
+        addSubview(movieImageView)
+        addSubview(titleLabel)
+        addSubview(overviewLabel)
+        addSubview(genreIconView)
         
-        posterImageView.contentMode = .scaleAspectFill
-        posterImageView.clipsToBounds = true
-        posterImageView.backgroundColor = .systemGray
-//        posterImageView.layer.cornerRadius = 10
+        // Configure auto layout
+        movieImageView.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        overviewLabel.translatesAutoresizingMaskIntoConstraints = false
+        genreIconView.translatesAutoresizingMaskIntoConstraints = false
         
-        posterImageView.translatesAutoresizingMaskIntoConstraints = false
+        // Configure image view
+        movieImageView.layer.cornerRadius = 10
+        movieImageView.clipsToBounds = true
+        movieImageView.contentMode = .scaleAspectFill
+        movieImageView.backgroundColor = .systemGray6
         
-        contentView.addSubview(posterImageView)
+        // Configure genre icon view
+        genreIconView.contentMode = .scaleAspectFit
+        genreIconView.tintColor = .systemBlue
+        genreIconView.isHidden = true
         
-        titleLabel.font = .preferredFont(forTextStyle: .headline)
+        // Configure labels
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         titleLabel.textColor = .label
-        titleLabel.numberOfLines = 0
-        titleLabel.adjustsFontSizeToFitWidth = true
-
-        ratingLabel.font = .preferredFont(forTextStyle: .subheadline)
-        ratingLabel.textColor = .secondaryLabel
-        ratingLabel.numberOfLines = 0
         
-        let configuration = UIImage.SymbolConfiguration(weight: .regular)
-        let ratingSymbol = UIImage(systemName: "star.fill", withConfiguration: configuration)
-        let ratingImage = UIImageView(image: ratingSymbol)
-        ratingImage.tintColor = .systemYellow
+        overviewLabel.font = UIFont.systemFont(ofSize: 14)
+        overviewLabel.textColor = .secondaryLabel
+        overviewLabel.numberOfLines = 2
         
-        let ratingStackView = UIStackView(arrangedSubviews: [ratingImage, ratingLabel])
-        ratingStackView.axis = .horizontal
-        ratingStackView.spacing = 5
-        ratingStackView.alignment = .center
-        
-        let captionStack = UIStackView(arrangedSubviews: [titleLabel, ratingStackView])
-        captionStack.axis = .vertical
-        captionStack.spacing = 5
-        captionStack.alignment = .leading
-        
-        captionStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        contentView.addSubview(captionStack)
-        
-        accessoryType = .disclosureIndicator
-        
-        let padding: CGFloat = 10
-        
-        
+        // Set constraints
         NSLayoutConstraint.activate([
-            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
-            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
-
-//            posterImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            posterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            movieImageView.topAnchor.constraint(equalTo: topAnchor, constant: 12),
+            movieImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            movieImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
+            movieImageView.widthAnchor.constraint(equalToConstant: 80),
+            movieImageView.heightAnchor.constraint(equalToConstant: 120),
             
-            posterImageView.widthAnchor.constraint(equalToConstant: 90),
-            posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 1.5),
-
-            captionStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
-            captionStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -padding),
-
-            captionStack.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: padding),
-            captionStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 12),
+            titleLabel.leadingAnchor.constraint(equalTo: movieImageView.trailingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            
+            overviewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            overviewLabel.leadingAnchor.constraint(equalTo: movieImageView.trailingAnchor, constant: 12),
+            overviewLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            overviewLabel.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -12),
+            
+            genreIconView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            genreIconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            genreIconView.widthAnchor.constraint(equalToConstant: 30),
+            genreIconView.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
     
@@ -84,16 +95,47 @@ class SearchCell: UITableViewCell, SelfConfiguringCell {
     }
     
     func configure(with movie: Movie) {
+        // Cancel any previous image loading task
+        imageTask?.cancel()
+        
+        // Configure for movie display
         titleLabel.text = movie.title
-        ratingLabel.text = movie.voteAverage?.formatted(.number.precision(.fractionLength(1)))
-        let imageURL = ImageLoader.shared.generateFullURL(from: movie.posterPath, as: .poster)
-        let request = self.makeRequest(with: imageURL, cellSize: bounds.size)
-        let options = self.makeImageLoadingOptions()
-        NukeExtensions.loadImage(with: request, options: options, into: posterImageView)
+        overviewLabel.text = movie.overview
+        genreIconView.isHidden = true
+        movieImageView.isHidden = false
+        
+        // Load poster image with Nuke
+        if let posterPath = movie.posterPath {
+            let urlString = "https://image.tmdb.org/t/p/w200\(posterPath)"
+            if let url = URL(string: urlString) {
+                imageTask = Task {
+                    do {
+                        // Load image asynchronously
+                        loadImage(with: url, into: movieImageView)
+                    }
+                }
+            }
+        } else {
+            // Set placeholder image if no poster
+            movieImageView.image = UIImage(systemName: "film")
+            movieImageView.contentMode = .center
+            movieImageView.tintColor = .systemGray
+        }
     }
     
-    func makeRequest(with url: URL, cellSize: CGSize) -> ImageRequest {
-        ImageRequest(url: url)
+    func configureAsGenre(with genre: Genre) {
+        // Cancel any previous image loading task
+        imageTask?.cancel()
+        
+        // Configure for genre display
+        titleLabel.text = genre.name
+        overviewLabel.text = "Browse movies in this genre"
+        
+        // Show genre icon instead of movie poster
+        movieImageView.isHidden = true
+        genreIconView.isHidden = false
+        genreIconView.image = UIImage(systemName: "film.stack")
+        genreIconView.tintColor = .systemBlue
     }
     
     func makeImageLoadingOptions() -> ImageLoadingOptions {

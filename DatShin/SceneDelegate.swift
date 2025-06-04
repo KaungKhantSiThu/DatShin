@@ -11,13 +11,17 @@ import CoreSpotlight
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    fileprivate var appCoordinator: AppCoordinator?
     
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-//              let userInfo = userActivity.userInfo as? [String: Any],
-//              let identifier = userInfo[CSSearchableItemActivityIdentifier] as? String else {
-//                  return
-//              }
+        // Handle deep linking with coordinator
+        guard let userInfo = userActivity.userInfo as? [String: Any],
+              let identifier = userInfo[CSSearchableItemActivityIdentifier] as? String else {
+                  return
+              }
+        
+        // The coordinator could handle deep linking here
+        // appCoordinator?.handleDeepLink(identifier: identifier)
     }
 
 
@@ -30,8 +34,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
-        window?.rootViewController = TabBarController()
-        window?.makeKeyAndVisible()
+        // Set up the dependency injection container
+        let serviceFactory = ServiceFactory()
+        let viewControllerFactory = ViewControllerFactory(serviceFactory: serviceFactory)
+        
+        // Initialize and start the app coordinator
+        if let window = window {
+            appCoordinator = AppCoordinator(window: window, viewControllerFactory: viewControllerFactory)
+            
+            // Store reference in AppDelegate for global access
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.appCoordinator = appCoordinator
+            }
+            
+            appCoordinator?.start()
+            
+            // Set up debug gesture recognizer
+            #if DEBUG
+            setupDebugGestureRecognizer()
+            #endif
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -65,3 +87,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+
+// MARK: - Extension for SceneDelegate
+
+extension SceneDelegate {
+    /// Sets up the debug gesture recognizer
+    func setupDebugGestureRecognizer() {
+        guard let window = window, let appCoordinator = appCoordinator else { return }
+        
+        #if DEBUG
+        // Only add the gesture recognizer in debug builds
+        _ = DebugGestureRecognizer(window: window, appCoordinator: appCoordinator)
+        #endif
+    }
+}

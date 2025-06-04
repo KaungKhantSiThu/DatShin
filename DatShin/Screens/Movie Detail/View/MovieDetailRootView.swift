@@ -35,7 +35,7 @@ class MovieDetailRootView: NiblessView {
     enum Item: Hashable {
         case header(Movie)
         case castMember(CastMember)
-        case similarMovie(Movie)
+        case similarMovie(MovieListItem)
         case watchProvider(WatchProvider)
     }
     

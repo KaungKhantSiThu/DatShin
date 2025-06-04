@@ -51,5 +51,10 @@ class GenreCell: UICollectionViewCell {
     func configure(with genre: Genre) {
         self.label.text = genre.name
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        label.text = nil
+    }
 }
 
