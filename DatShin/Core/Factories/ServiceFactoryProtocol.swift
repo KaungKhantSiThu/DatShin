@@ -6,7 +6,6 @@
 //
 
 import Foundation
-//import TMDb // //import TMDb module
 
 /// Protocol defining the interface for a service factory
 protocol ServiceFactoryProtocol {
@@ -39,4 +38,8 @@ protocol ServiceFactoryProtocol {
     
     /// Returns a service that conforms to the GenreServiceProtocol.
     func makeGenreService() -> GenreServiceProtocol
+
+    /// Returns a service that conforms to the ConfigurationService protocol.
+    func makeConfigurationService() -> ConfigurationService
+    func makeSearchResultsViewModel() -> SearchResultsViewModel // Added for new search UI
 }

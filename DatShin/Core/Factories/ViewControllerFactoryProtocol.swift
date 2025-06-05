@@ -22,7 +22,10 @@ protocol ViewControllerFactoryProtocol {
     func makeNavigationController(rootViewController: UIViewController) -> UINavigationController
     
     /// Creates a movie detail view controller for the specified movie ID
-    func makeMovieDetailViewController(movieID: Movie.ID) -> UIViewController
+    func makeMovieDetailViewController(movieID: Movie.ID) -> MovieDetailViewController
+    
+    /// Creates a search results view controller with the specified view model
+    func makeSearchResultsViewController(viewModel: SearchResultsViewModel) -> SearchResultsViewController
     
     /// Creates a log viewer view controller for debugging
     func makeLogViewerViewController() -> UIViewController

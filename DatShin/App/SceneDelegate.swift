@@ -44,7 +44,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let window = window {
             print("window not optional")
 
-            appCoordinator = AppCoordinator(window: window, viewControllerFactory: viewControllerFactory)
+            appCoordinator = AppCoordinator(window: window, viewControllerFactory: viewControllerFactory, serviceFactory: serviceFactory)
             
             // Store reference in AppDelegate for global access
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
@@ -54,6 +54,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             
             appCoordinator?.start()
+            window.makeKeyAndVisible()
             
             // Set up debug gesture recognizer
             #if DEBUG

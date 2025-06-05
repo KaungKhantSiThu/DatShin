@@ -8,7 +8,9 @@
 import UIKit
 
 /// Concrete implementation of ViewControllerFactoryProtocol
-final class ViewControllerFactory: ViewControllerFactoryProtocol {
+final class ViewControllerFactory: @preconcurrency ViewControllerFactoryProtocol {
+
+    
     // MARK: - Private Properties
     
     private let serviceFactory: ServiceFactoryProtocol
@@ -46,15 +48,17 @@ final class ViewControllerFactory: ViewControllerFactoryProtocol {
         let searchService = serviceFactory.makeSearchService()
         let trendingService = serviceFactory.makeTrendingService()
         let genreService = serviceFactory.makeGenreService()
+        let configurationService = serviceFactory.makeConfigurationService()
         
         let viewModel = SearchViewModel(
             movieService: movieService,
             searchService: searchService,
             trendingService: trendingService,
-            genreService: genreService
+            genreService: genreService,
+            configurationService: configurationService
         )
         
-        let searchVC = SearchViewController(viewModel: viewModel)
+        let searchVC = SearchViewController(viewModel: viewModel, serviceFactory: serviceFactory)
         searchVC.title = "Discover & Search"
         // The coordinator that calls this method will set itself as the delegate.
         return searchVC
@@ -66,11 +70,19 @@ final class ViewControllerFactory: ViewControllerFactoryProtocol {
         return navigationController
     }
     
-    func makeMovieDetailViewController(movieID: Movie.ID) -> UIViewController {
+    func makeMovieDetailViewController(movieID: Movie.ID) -> MovieDetailViewController {
         logger.debug("Creating MovieDetailViewController for movie ID: \(movieID)")
         let moviesFetcher = serviceFactory.makeMovieService()
         let viewModel = MovieDetailViewModel(id: movieID, fetcherService: moviesFetcher)
         let detailVC = MovieDetailViewController(viewModel: viewModel)
         return detailVC
+    }
+
+    func makeSearchResultsViewController(viewModel: SearchResultsViewModel) -> SearchResultsViewController {
+        logger.debug("Creating SearchResultsViewController")
+        let searchResultsVC = SearchResultsViewController(viewModel: viewModel)
+        // Title can be dynamic or set by the coordinator if needed
+        // searchResultsVC.title = "Search Results"
+        return searchResultsVC
     }
 }

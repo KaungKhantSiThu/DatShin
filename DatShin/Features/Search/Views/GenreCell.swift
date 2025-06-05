@@ -7,6 +7,12 @@
 
 import UIKit
 
+/**
+ GenreCell is used in the Search screen's genre carousel (horizontal scrollable section).
+ It displays a genre name and supports skeleton loading for smooth loading transitions.
+ - Registered in SearchViewController+Layout.swift (configureCollectionView)
+ - Used by SearchCollectionViewDataSource
+*/
 class GenreCell: UICollectionViewCell {
     static let reuseIdentifier = "GenreCell"
     
@@ -47,6 +53,8 @@ class GenreCell: UICollectionViewCell {
         titleLabel.text = genre.name
     }
     
+    /// Prepares the cell for reuse by resetting the label and skeleton state.
+    /// Always call showSkeleton(false) before displaying real data.
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
@@ -54,6 +62,9 @@ class GenreCell: UICollectionViewCell {
     }
     
     // MARK: - Skeleton Loading
+    /// Call showSkeleton(true) to display a skeleton placeholder with shimmer animation.
+    /// Call showSkeleton(false) to display the genre label.
+    /// Placeholders are layered for a smooth loading experience.
     private func setupPlaceholders() {
         titlePlaceholderView.backgroundColor = .systemGray4 // Slightly darker for contrast with cell background
         titlePlaceholderView.layer.cornerRadius = 4

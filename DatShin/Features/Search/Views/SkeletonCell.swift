@@ -1,5 +1,10 @@
 import UIKit
 
+/**
+ SkeletonCell is used in the Search screen's carousels and genre sections to display loading placeholders with shimmer animation.
+ - Registered in SearchViewController+Layout.swift (configureCollectionView)
+ - Used by SearchCollectionViewDataSource for loading states
+*/
 class SkeletonCell: UICollectionViewCell {
     static let reuseIdentifier = "SkeletonCell"
     
@@ -36,6 +41,8 @@ class SkeletonCell: UICollectionViewCell {
     }
     
     // Call this if you want to start a shimmer animation, for example
+    /// Starts a basic shimmer animation for the skeleton placeholder.
+    /// Call in showSkeleton(true) or when displaying loading state.
     func startShimmering() {
         // Basic shimmer (can be improved with gradients and animations)
         let darkColor = UIColor.systemGray4.cgColor
@@ -56,11 +63,9 @@ class SkeletonCell: UICollectionViewCell {
         animation.repeatCount = .infinity
         gradientLayer.add(animation, forKey: "shimmer")
     }
-//
-//    func stopShimmering() {
-//        placeholderView.layer.sublayers?.removeAll { $0 is CAGradientLayer }
-//    }
 
+    /// Prepares the cell for reuse by stopping shimmer animation.
+    /// Always call stopShimmering() before displaying real data.
     override func prepareForReuse() {
         super.prepareForReuse()
         stopShimmering() // Stop animation when cell is reused

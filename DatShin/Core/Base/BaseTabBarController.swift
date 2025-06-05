@@ -48,6 +48,6 @@ class TabBarController: UITabBarController {
         let discoverNC = UINavigationController() // Renamed from searchNC for clarity of its new role
         discoverNC.tabBarItem = UITabBarItem(title: "Discover", image: UIImage(systemName: "magnifyingglass"), tag: 1) // Using magnifying glass for 'Discover & Search'
         
-        viewControllers = [watchlistNC, discoverNC]
+        viewControllers = [discoverNC, watchlistNC]
     }
 }

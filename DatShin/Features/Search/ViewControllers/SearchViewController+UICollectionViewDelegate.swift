@@ -11,10 +11,6 @@ extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let sectionKind = SectionLayoutKind(rawValue: indexPath.section) else { return }
         
-        if (!self.viewModel.currentSearchQuery.isEmpty && sectionKind != .searchResults) || 
-           (self.viewModel.currentSearchQuery.isEmpty && sectionKind == .searchResults) {
-            return
-        }
 
         switch sectionKind {
         case .trendingMovies:
@@ -36,10 +32,6 @@ extension SearchViewController: UICollectionViewDelegate {
         case .upcomingMovies:
             if indexPath.item < self.viewModel.upcomingMovies.count {
                 delegate?.searchViewController(self, didSelectMovie: self.viewModel.upcomingMovies[indexPath.item])
-            }
-        case .searchResults:
-            if indexPath.item < self.viewModel.searchResults.count {
-                delegate?.searchViewController(self, didSelectMovie: self.viewModel.searchResults[indexPath.item])
             }
         case .genres:
             if indexPath.item < self.viewModel.movieGenres.count {

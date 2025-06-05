@@ -12,11 +12,14 @@ final class SearchCoordinator: BaseCoordinator {
     // MARK: - Properties
     
     private let viewControllerFactory: ViewControllerFactoryProtocol
+    private let serviceFactory: ServiceFactoryProtocol // Added to pass to MovieCoordinator
+    private var movieCoordinator: MovieCoordinator? // Added to manage movie detail and search results flow
     
     // MARK: - Initialization
     
-    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactoryProtocol) {
+    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactoryProtocol, serviceFactory: ServiceFactoryProtocol) { // Added serviceFactory
         self.viewControllerFactory = viewControllerFactory
+        self.serviceFactory = serviceFactory // Added
         super.init(navigationController: navigationController)
     }
     
@@ -24,8 +27,19 @@ final class SearchCoordinator: BaseCoordinator {
     
     override func start() {
         let searchViewController = viewControllerFactory.makeSearchViewController()
-        searchViewController.delegate = self // Set the delegate
-        navigationController.viewControllers = [searchViewController] // Set as root of the navigation stack for this tab
+        
+        // Instantiate and start MovieCoordinator, which will handle search results and movie details
+        let movieCoordinator = MovieCoordinator(
+            navigationController: navigationController,
+            viewControllerFactory: viewControllerFactory,
+            serviceFactory: serviceFactory
+        )
+        self.movieCoordinator = movieCoordinator
+        addChildCoordinator(movieCoordinator) // Add as child
+        // movieCoordinator.start() // MovieCoordinator's start doesn't push a VC, it's ready to present details/search results
+
+        searchViewController.delegate = movieCoordinator // MovieCoordinator now handles SearchViewControllerDelegate
+        navigationController.viewControllers = [searchViewController] // Set as root
     }
     
     // MARK: - Navigation Methods
@@ -37,19 +51,9 @@ final class SearchCoordinator: BaseCoordinator {
 }
 
 // MARK: - SearchViewControllerDelegate
-
-extension SearchCoordinator: SearchViewControllerDelegate {
-    func searchViewController(_ controller: SearchViewController, didSelectMovie movie: MovieListItem) {
-        logger.debug("SearchCoordinator: didSelectMovie with ID \(movie.id)")
-        showMovieDetail(movieID: movie.id)
-    }
-    
-    func searchViewController(_ controller: SearchViewController, didSelectGenre genre: Genre) {
-        logger.debug("SearchCoordinator: didSelectGenre: \(genre.name) (ID: \(genre.id))")
-        // TODO: Implement navigation to a genre-specific screen or filter results by genre.
-        // For now, we can just log it or perhaps show an alert.
-        let alert = UIAlertController(title: "Genre Selected", message: "Displaying movies for genre '\(genre.name)' is not yet implemented.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        navigationController.present(alert, animated: true)
-    }
-}
+// SearchCoordinator no longer directly conforms to SearchViewControllerDelegate.
+// This responsibility has been moved to MovieCoordinator.
+// extension SearchCoordinator: SearchViewControllerDelegate {
+    // func searchViewController(_ controller: SearchViewController, didSelectMovie movie: MovieListItem) { ... }
+    // func searchViewController(_ controller: SearchViewController, didSelectGenre genre: Genre) { ... }
+// }

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-//import TMDb // Import the new TMDb module
 
 /// Concrete implementation of ServiceFactoryProtocol
 final class ServiceFactory: ServiceFactoryProtocol {
@@ -70,5 +69,15 @@ final class ServiceFactory: ServiceFactoryProtocol {
     
     func makeGenreService() -> GenreServiceProtocol {
         return tmdbClient.genres
+    }
+
+    func makeConfigurationService() -> ConfigurationService {
+        return tmdbClient.configurations
+    }
+
+    @MainActor func makeSearchResultsViewModel() -> SearchResultsViewModel {
+        let searchService = makeSearchService() // Get the concrete SearchService
+        let configurationService = makeConfigurationService() // Get the concrete ConfigurationService
+        return SearchResultsViewModel(searchService: searchService, imageConfigurationService: configurationService)
     }
 }

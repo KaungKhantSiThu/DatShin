@@ -18,8 +18,7 @@ extension SearchViewController {
             viewModel.$nowPlayingMovies.map { _ in SectionLayoutKind.nowPlayingMovies }.eraseToAnyPublisher(),
             viewModel.$upcomingMovies.map { _ in SectionLayoutKind.upcomingMovies }.eraseToAnyPublisher(),
             viewModel.$trendingMovies.map { _ in SectionLayoutKind.trendingMovies }.eraseToAnyPublisher(),
-            viewModel.$movieGenres.map { _ in SectionLayoutKind.genres }.eraseToAnyPublisher(),
-            viewModel.$searchResults.map { _ in SectionLayoutKind.searchResults }.eraseToAnyPublisher()
+            viewModel.$movieGenres.map { _ in SectionLayoutKind.genres }.eraseToAnyPublisher()
         ).eraseToAnyPublisher()
 
         let loadingStateChangedPublisher = Publishers.MergeMany(
@@ -28,8 +27,7 @@ extension SearchViewController {
             viewModel.$isLoadingNowPlaying.map { _ in SectionLayoutKind.nowPlayingMovies },
             viewModel.$isLoadingUpcoming.map { _ in SectionLayoutKind.upcomingMovies },
             viewModel.$isLoadingTrending.map { _ in SectionLayoutKind.trendingMovies },
-            viewModel.$isLoadingGenres.map { _ in SectionLayoutKind.genres },
-            viewModel.$isLoadingSearchResults.map { _ in SectionLayoutKind.searchResults }
+            viewModel.$isLoadingGenres.map { _ in SectionLayoutKind.genres }
         ).eraseToAnyPublisher()
 
         Publishers.Merge(dataChangedPublisher, loadingStateChangedPublisher)
@@ -37,7 +35,7 @@ extension SearchViewController {
             .sink { [weak self] sectionKindToUpdate in
                 guard let self = self else { return }
                 if self.isViewLoaded && self.dataSource != nil {
-                    self.applySnapshot(for: sectionKindToUpdate, animatingDifferences: true)
+                    self.dataSource.applySnapshot(for: sectionKindToUpdate, animatingDifferences: true)
                 }
             }
             .store(in: &cancellables)
@@ -47,7 +45,7 @@ extension SearchViewController {
             .sink { [weak self] _ in
                 guard let self = self else { return }
                 if self.isViewLoaded && self.dataSource != nil {
-                    self.applyAllSectionsSnapshot(animatingDifferences: true)
+                    self.dataSource.applyAllSectionsSnapshot(animatingDifferences: true)
                 }
             }
             .store(in: &cancellables)

@@ -13,13 +13,15 @@ final class AppCoordinator: BaseCoordinator {
     
     private let window: UIWindow
     fileprivate let viewControllerFactory: ViewControllerFactoryProtocol
+    fileprivate let serviceFactory: ServiceFactoryProtocol // Added to pass to child coordinators
     private var tabBarController: UITabBarController?
     
     // MARK: - Initialization
     
-    init(window: UIWindow, viewControllerFactory: ViewControllerFactoryProtocol) {
+    init(window: UIWindow, viewControllerFactory: ViewControllerFactoryProtocol, serviceFactory: ServiceFactoryProtocol) { // Added serviceFactory
         self.window = window
         self.viewControllerFactory = viewControllerFactory
+        self.serviceFactory = serviceFactory // Added
         
         // Create a dummy navigation controller for the base coordinator
         // This won't be used directly as we're setting the window's root to a tab bar controller
@@ -34,7 +36,6 @@ final class AppCoordinator: BaseCoordinator {
         setupTabBarController()
         window.rootViewController = tabBarController
         // SceneDelegate now handles making the window key and visible.
-        window.makeKeyAndVisible()
         setupTabCoordinators()
         print(#function)
     }
@@ -57,7 +58,7 @@ final class AppCoordinator: BaseCoordinator {
                 addChildCoordinator(watchlistCoordinator)
                 watchlistCoordinator.start()
             case 1: // Search tab (previously index 2)
-                let searchCoordinator = SearchCoordinator(navigationController: navigationController, viewControllerFactory: viewControllerFactory)
+                let searchCoordinator = SearchCoordinator(navigationController: navigationController, viewControllerFactory: viewControllerFactory, serviceFactory: serviceFactory) // Added serviceFactory
                 addChildCoordinator(searchCoordinator)
                 searchCoordinator.start()
             default:
